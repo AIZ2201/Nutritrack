@@ -1,0 +1,21 @@
+name: nutritrack
+description: A new Flutter project for tracking nutrition.
+
+# Flutter SDK version
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # 添加你需要的依赖项
+  cupertino_icons: ^1.0.2
+  http: ^1.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
