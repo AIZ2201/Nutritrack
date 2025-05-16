@@ -1,309 +1,192 @@
 import 'package:flutter/material.dart';
+import 'profile_screen.dart';
+import 'add_food_screen.dart';
 
-class MainHomeScreen extends StatelessWidget {
-  const MainHomeScreen({super.key});
+class MainHomeScreen extends StatefulWidget {
+  const MainHomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MainHomeScreen> createState() => _MainHomeScreenState();
+}
+
+class _MainHomeScreenState extends State<MainHomeScreen> {
+  int _selectedIndex = 0;
+
+  // 页面列表
+  late final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      _buildHomeContent(),
+      const Center(child: Text('饮食页面')), // 占位
+      const Center(child: Text('分析页面')), // 占位
+      const ProfileScreen(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
-    // 示例数据
-    final int dailyCalories = 1450;
-    final int calorieGoal = 2000;
-    final int caloriePercentage = ((dailyCalories / calorieGoal) * 100).round();
-
-    final nutrients = [
-      {"name": "蛋白质", "current": 65, "goal": 120, "unit": "g"},
-      {"name": "碳水", "current": 180, "goal": 250, "unit": "g"},
-      {"name": "脂肪", "current": 45, "goal": 65, "unit": "g"},
-    ];
-
-    final meals = [
-      {"id": 1, "time": "早餐", "calories": 350, "name": "燕麦粥配水果"},
-      {"id": 2, "time": "午餐", "calories": 650, "name": "鸡肉沙拉配全麦面包"},
-      {"id": 3, "time": "加餐", "calories": 150, "name": "希腊酸奶配坚果"},
-      {"id": 4, "time": "晚餐", "calories": 300, "name": "蒸鱼配蔬菜"},
-    ];
-
-    final Color progressGreen = const Color(0xFF15803D);
-    final Color progressBg = const Color(0xFFD6D6D6);
-    final Color navBg = Colors.white;
-    final Color navBorder = const Color(0xFFE5E7EB);
-
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
-      body: SafeArea(
+      appBar: _selectedIndex != 3 ? AppBar(
+        title: const Text(
+          '健康饮食管理',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
+        ),
+        backgroundColor: const Color(0xFF5B6AF5),
+        elevation: 2,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.more_vert, color: Colors.white),
+            onPressed: () {},
+          ),
+        ],
+      ) : null,
+      body: _pages[_selectedIndex],
+      floatingActionButton: _selectedIndex == 0 ? FloatingActionButton(
+        onPressed: () {
+          // 导航到添加食物页面
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddFoodScreen()),
+          );
+        },
+        backgroundColor: const Color(0xFF5B6AF5),
+        elevation: 4,
+        child: const Icon(Icons.add, color: Colors.white),
+      ) : null,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            currentIndex: _selectedIndex,
+            onTap: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            selectedItemColor: const Color(0xFF5B6AF5),
+            unselectedItemColor: const Color(0xFF9CA3AF),
+            backgroundColor: Colors.white,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                activeIcon: Icon(Icons.home),
+                label: '首页',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.restaurant_menu_outlined),
+                activeIcon: Icon(Icons.restaurant_menu),
+                label: '饮食',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.show_chart_outlined),
+                activeIcon: Icon(Icons.show_chart),
+                label: '分析',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline),
+                activeIcon: Icon(Icons.person),
+                label: '我的',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 主页内容 (保持原有代码)
+  Widget _buildHomeContent() {
+    // 保持原有的主页内容代码...
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          _buildNutritionSummaryCard(),
+          const SizedBox(height: 16),
+          _buildHealthStatusCard(),
+          const SizedBox(height: 16),
+          _buildNutritionAdviceCard(),
+          const SizedBox(height: 16),
+          _buildFoodListCard(),
+          const SizedBox(height: 80), // 为底部导航栏留出空间
+        ],
+      ),
+    );
+  }
+
+  // 以下保留原有的所有卡片构建方法...
+  // _buildNutritionSummaryCard()
+  // _buildNutritionItem()
+  // _buildHealthStatusCard()
+  // _buildStatusItem()
+  // _buildNutritionAdviceCard()
+  // _buildAdviceItem()
+  // _buildFoodListCard()
+  // _buildFoodItem()
+
+  // 今日营养摄入卡片
+  Widget _buildNutritionSummaryCard() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                  bottom: BorderSide(color: navBorder),
+            Row(
+              children: [
+                Icon(
+                  Icons.restaurant,
+                  color: const Color(0xFF5B6AF5),
+                  size: 20,
                 ),
-              ),
-              child: Column(
-                children: const [
-                  Text(
-                    "Nutritrack",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1,
-                    ),
+                const SizedBox(width: 8),
+                const Text(
+                  '今日营养摄入',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
-                  SizedBox(height: 4),
-                  Text(
-                    "今日营养摄入概览",
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Main content
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 90),
-                child: Column(
-                  children: [
-                    // 卡路里汇总
-                    Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Row(
-                          children: [
-                            // 环形进度条
-                            SizedBox(
-                              width: 80,
-                              height: 80,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 80,
-                                    height: 80,
-                                    child: CircularProgressIndicator(
-                                      value: caloriePercentage / 100,
-                                      strokeWidth: 8,
-                                      backgroundColor: progressBg,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          progressGreen),
-                                    ),
-                                  ),
-                                  Text(
-                                    "$caloriePercentage%",
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  const Text(
-                                    "今日卡路里",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    "目标: $calorieGoal 卡路里",
-                                    style: const TextStyle(
-                                        color: Colors.grey, fontSize: 14),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    "$dailyCalories",
-                                    style: const TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const Text(
-                                    "已摄入卡路里",
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 13),
-                                  ),
-                                  Text(
-                                    "剩余: ${calorieGoal - dailyCalories} 卡路里",
-                                    style: const TextStyle(
-                                        color: Colors.grey, fontSize: 13),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    // 营养素摄入
-                    Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "营养素摄入",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 12),
-                            ...nutrients.map((nutrient) {
-                              final percent = (nutrient["current"] as int) /
-                                  (nutrient["goal"] as int) *
-                                  100;
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 16),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(nutrient["name"] as String,
-                                            style:
-                                                const TextStyle(fontSize: 15)),
-                                        Text(
-                                          "${nutrient["current"]}/${nutrient["goal"]} ${nutrient["unit"]}",
-                                          style: const TextStyle(fontSize: 15),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 4),
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(4),
-                                      child: LinearProgressIndicator(
-                                        value: percent / 100,
-                                        minHeight: 8,
-                                        backgroundColor: progressBg,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                progressGreen),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    // 今日餐食
-                    Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text(
-                                  "今日餐食",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  "点击查看详情",
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 13),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            ...meals.map((meal) {
-                              return Container(
-                                margin: const EdgeInsets.only(bottom: 12),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFF3F4F6),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(meal["time"] as String,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold)),
-                                        Text(
-                                          meal["name"] as String,
-                                          style: const TextStyle(
-                                              fontSize: 13, color: Colors.grey),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      "${meal["calories"]} 卡路里",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
-              ),
+              ],
             ),
-            // 底部导航栏
-            Container(
-              height: 64,
-              decoration: BoxDecoration(
-                color: navBg,
-                border: Border(top: BorderSide(color: navBorder)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _NavItem(
-                      icon: Icons.home,
-                      label: "首页",
-                      selected: true,
-                      onTap: () {}),
-                  _NavItem(
-                      icon: Icons.pie_chart,
-                      label: "记录",
-                      selected: false,
-                      onTap: () {}),
-                  _NavItem(
-                      icon: Icons.message,
-                      label: "建议",
-                      selected: false,
-                      onTap: () {}),
-                  _NavItem(
-                      icon: Icons.person,
-                      label: "我的",
-                      selected: false,
-                      onTap: () {}),
-                ],
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildNutritionItem('1,450', '卡路里'),
+                _buildNutritionItem('65g', '蛋白质'),
+                _buildNutritionItem('45g', '脂肪'),
+                _buildNutritionItem('180g', '碳水'),
+              ],
+            ),
+            const SizedBox(height: 16),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: LinearProgressIndicator(
+                value: 0.65,
+                backgroundColor: const Color(0xFFE5E7EB),
+                color: const Color(0xFF5B6AF5),
+                minHeight: 8,
               ),
             ),
           ],
@@ -311,43 +194,287 @@ class MainHomeScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-class _NavItem extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
+  // 营养项目
+  Widget _buildNutritionItem(String value, String label) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF5B6AF5),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.grey[600],
+          ),
+        ),
+      ],
+    );
+  }
 
-  const _NavItem({
-    required this.icon,
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
+  // 健康状态卡片
+  Widget _buildHealthStatusCard() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.favorite,
+                  color: const Color(0xFF5B6AF5),
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  '健康状态',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildStatusItem('67', '健康指数'),
+                ),
+                Expanded(
+                  child: _buildStatusItem('8.2', '睡眠质量'),
+                ),
+                Expanded(
+                  child: _buildStatusItem('85%', '目标达成'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    final Color selectedColor = const Color(0xFF4FC3F7);
-    final Color unselectedColor = Colors.grey;
-    return GestureDetector(
-      onTap: onTap,
+  // 状态项目
+  Widget _buildStatusItem(String value, String label) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF9FAFB),
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon,
-              color: selected ? selectedColor : unselectedColor, size: 28),
-          const SizedBox(height: 2),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF5B6AF5),
+            ),
+          ),
+          const SizedBox(height: 4),
           Text(
             label,
             style: TextStyle(
-              color: selected ? selectedColor : unselectedColor,
               fontSize: 12,
-              fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+              color: Colors.grey[600],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  // 营养建议卡片
+  Widget _buildNutritionAdviceCard() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.lightbulb_outline,
+                  color: const Color(0xFF5B6AF5),
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  '今日营养建议',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            _buildAdviceItem(
+              Icons.fitness_center,
+              '增加蛋白质摄入',
+              '您今天的蛋白质摄入低于目标，建议增加鸡胸肉、鱼类或豆制品的摄入。',
+            ),
+            const Divider(height: 24),
+            _buildAdviceItem(
+              Icons.grain,
+              '减少碳水化合物',
+              '您的碳水摄入已接近每日上限，建议晚餐选择低碳水食物。',
+            ),
+            const Divider(height: 24),
+            _buildAdviceItem(
+              Icons.refresh,
+              '补充维生素C',
+              '建议增加柑橘类水果或绿叶蔬菜的摄入，以满足维生素C的需求。',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 建议项目
+  Widget _buildAdviceItem(IconData icon, String title, String description) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(
+          icon,
+          color: const Color(0xFF5B6AF5),
+          size: 24,
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                description,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // 食物列表卡片
+  Widget _buildFoodListCard() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.restaurant_menu,
+                  color: const Color(0xFF5B6AF5),
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  '今日已添加食物',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            _buildFoodItem(
+              '全麦面包配鸡蛋',
+              '蛋白质: 15g | 碳水: 30g | 脂肪: 8g',
+              '320 kcal',
+            ),
+            const Divider(height: 24),
+            _buildFoodItem(
+              '鸡胸肉沙拉',
+              '蛋白质: 28g | 碳水: 15g | 脂肪: 12g',
+              '280 kcal',
+            ),
+            const Divider(height: 24),
+            _buildFoodItem(
+              '希腊酸奶配蓝莓',
+              '蛋白质: 12g | 碳水: 18g | 脂肪: 5g',
+              '170 kcal',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 食物项目
+  Widget _buildFoodItem(String name, String nutrition, String calories) {
+    return Row(
+      children: [
+        Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: const Color(0xFFF3F4F6),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const Icon(Icons.image, color: Colors.grey),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                nutrition,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          calories,
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF5B6AF5),
+          ),
+        ),
+      ],
     );
   }
 }
