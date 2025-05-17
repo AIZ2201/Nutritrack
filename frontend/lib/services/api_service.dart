@@ -9,14 +9,15 @@ bool useMock = true; // 是否使用模拟数据
 class ApiService {
   final BackendMode backendMode;
 
-  ApiService({this.backendMode = BackendMode.local}); // 后端模式（可切换）
+  // 修改默认模式为 remote
+  ApiService({this.backendMode = BackendMode.remote}); // 后端模式（可切换）
 
   String _getBaseUrl() {
     switch (backendMode) {
       case BackendMode.local:
         return 'http://192.168.1.100:8000'; // 本地模式地址
       case BackendMode.remote:
-        return 'http://10.208.103.55:8000'; // 异地模式地址
+        return 'http://10.203.197.55:8000'; // 异地模式地址
       case BackendMode.server:
         return 'http://123.60.149.85:8000'; // 服务器模式地址
     }
@@ -63,6 +64,23 @@ class ApiService {
       return {"success": true, "role": "user"}; // 模拟返回角色信息
     } else {
       return {"success": false, "role": null};
+    }
+  }
+
+  /// 获取主页食物卡片内容
+  Future<Map<String, dynamic>> fetchTodayMeals(String username) async {
+    final baseUrl = _getBaseUrl();
+    final url = '$baseUrl/homePage/todayMeals';
+    final requestBody = json.encode({'username': username});
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: requestBody,
+    );
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('获取今日食物数据失败: ${response.body}');
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'profile_screen.dart';
 import 'add_food_screen.dart';
+import '../services/api_service.dart';
 
 class MainHomeScreen extends StatefulWidget {
   const MainHomeScreen({Key? key}) : super(key: key);
@@ -384,6 +385,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   // 食物列表卡片
   Widget _buildFoodListCard() {
+    // 这里用户名建议从你的登录状态获取
+    const username = "testuser";
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -408,22 +411,43 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
               ],
             ),
             const SizedBox(height: 16),
-            _buildFoodItem(
-              '全麦面包配鸡蛋',
-              '蛋白质: 15g | 碳水: 30g | 脂肪: 8g',
-              '320 kcal',
-            ),
-            const Divider(height: 24),
-            _buildFoodItem(
-              '鸡胸肉沙拉',
-              '蛋白质: 28g | 碳水: 15g | 脂肪: 12g',
-              '280 kcal',
-            ),
-            const Divider(height: 24),
-            _buildFoodItem(
-              '希腊酸奶配蓝莓',
-              '蛋白质: 12g | 碳水: 18g | 脂肪: 5g',
-              '170 kcal',
+            FutureBuilder<Map<String, dynamic>>(
+              future: ApiService().fetchTodayMeals(username),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('加载失败: ${snapshot.error}'));
+                } else if (!snapshot.hasData ||
+                    snapshot.data!['todayMeals'] == null ||
+                    snapshot.data!['todayMeals']['meals'] == null) {
+                  return const Center(child: Text('暂无食物记录'));
+                }
+                final meals = snapshot.data!['todayMeals']['meals'];
+                List<dynamic> foods = [];
+                for (var mealKey in ['breakfast', 'lunch', 'dinner']) {
+                  final meal = meals[mealKey];
+                  if (meal != null && meal['foods'] != null) {
+                    foods.addAll(meal['foods']);
+                  }
+                }
+                if (foods.isEmpty) {
+                  return const Center(child: Text('暂无食物记录'));
+                }
+                final foodItems = foods.map((item) => FoodItem.fromFastApi(item)).toList();
+                return Column(
+                  children: [
+                    for (int i = 0; i < foodItems.length; i++) ...[
+                      _buildFoodItem(
+                        foodItems[i].name,
+                        foodItems[i].nutrition,
+                        foodItems[i].calories,
+                      ),
+                      if (i != foodItems.length - 1) const Divider(height: 24),
+                    ]
+                  ],
+                );
+              },
             ),
           ],
         ),
@@ -475,6 +499,26 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class FoodItem {
+  final String name;
+  final String nutrition;
+  final String calories;
+
+  FoodItem({required this.name, required this.nutrition, required this.calories});
+
+  factory FoodItem.fromFastApi(Map<String, dynamic> json) {
+    final nutritionMap = json['nutrition'] ?? {};
+    String nutritionStr =
+        '蛋白质: ${nutritionMap['protein'] ?? 0}g | 碳水: ${nutritionMap['carbon'] ?? 0}g | 脂肪: ${nutritionMap['fat'] ?? 0}g';
+    String caloriesStr = '${nutritionMap['calories'] ?? 0} kcal';
+    return FoodItem(
+      name: json['foodName'] ?? '',
+      nutrition: nutritionStr,
+      calories: caloriesStr,
     );
   }
 }
