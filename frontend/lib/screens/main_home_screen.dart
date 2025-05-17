@@ -385,7 +385,24 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   // 食物列表卡片
   Widget _buildFoodListCard() {
-    // 这里用户名建议从你的登录状态获取
+    // 推荐做法：将用户名保存在全局状态、Provider、GetX、shared_preferences等
+    // 这里举例用Provider（需在主入口用Provider包裹并传递用户信息）
+    //
+    // import 'package:provider/provider.dart';
+    // class UserModel with ChangeNotifier { String username; ... }
+    // 在主入口：ChangeNotifierProvider(create: (_) => UserModel(), child: MyApp())
+    //
+    // 然后这里获取：
+    // final username = Provider.of<UserModel>(context, listen: false).username;
+    //
+    // 如果用shared_preferences：
+    // final prefs = await SharedPreferences.getInstance();
+    // final username = prefs.getString('username') ?? '';
+    //
+    // 如果用GetX：
+    // final username = Get.find<UserController>().username;
+    //
+    // 临时写死：
     const username = "testuser";
     return Card(
       child: Padding(
@@ -418,19 +435,25 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                   return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('加载失败: ${snapshot.error}'));
-                } else if (!snapshot.hasData ||
-                    snapshot.data!['todayMeals'] == null ||
-                    snapshot.data!['todayMeals']['meals'] == null) {
+                } else if (!snapshot.hasData) {
                   return const Center(child: Text('暂无食物记录'));
                 }
-                final meals = snapshot.data!['todayMeals']['meals'];
+                // 调试输出
+                print('后端返回数据: ${snapshot.data}');
+                final todayMeals = snapshot.data!['todayMeals'];
+                if (todayMeals == null || todayMeals['meals'] == null) {
+                  return const Center(child: Text('暂无食物记录'));
+                }
+                final meals = todayMeals['meals'];
                 List<dynamic> foods = [];
                 for (var mealKey in ['breakfast', 'lunch', 'dinner']) {
                   final meal = meals[mealKey];
-                  if (meal != null && meal['foods'] != null) {
+                  if (meal != null && meal['foods'] != null && meal['foods'] is List) {
                     foods.addAll(meal['foods']);
                   }
                 }
+                // 再次调试 foods
+                print('foods: $foods');
                 if (foods.isEmpty) {
                   return const Center(child: Text('暂无食物记录'));
                 }
