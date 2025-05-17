@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final password = _passwordController.text;
 
     try {
-      final result = await _apiService.login(username, password);
+      // final result = await _apiService.login(username, password);
       if (true) {//test
         // 登录成功后跳转到 main_home_screen
         Navigator.pushReplacement(
