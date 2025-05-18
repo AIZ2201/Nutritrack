@@ -67,11 +67,13 @@ class ApiService {
     }
   }
 
-  /// 获取主页食物卡片内容
-  Future<Map<String, dynamic>> fetchTodayMeals(String username) async {
+
+
+  /// 获取指定日期的食物卡片内容
+  Future<Map<String, dynamic>> fetchMealsByDate(String username, String date) async {
     final baseUrl = _getBaseUrl();
     final url = '$baseUrl/homePage/todayMeals';
-    final requestBody = json.encode({'username': username});
+    final requestBody = json.encode({'username': username, 'date': date});
     final response = await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
@@ -80,7 +82,43 @@ class ApiService {
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
-      throw Exception('获取今日食物数据失败: ${response.body}');
+      throw Exception('获取食物数据失败: ${response.body}');
+    }
+  }
+
+  /// 上传饮食记录（含图片 base64）
+  Future<bool> uploadFoodRecord({
+    required String username,
+    required String foodName,
+    required double protein,
+    required double fat,
+    required double carbon,
+    required double calorie,
+    required String time,
+    required String imageBase64,
+  }) async {
+    final baseUrl = _getBaseUrl();
+    final url = '$baseUrl/records/upload'; // 修改为正确的上传路径
+    final body = json.encode({
+      'username': username,
+      'foodName': foodName,
+      'protain': protein, // 注意拼写
+      'fat': fat,
+      'carbon': carbon,
+      'calorie': calorie,
+      'time': time,
+      'image_base64': imageBase64,
+    });
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: body,
+    );
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      print('上传失败: ${response.body}');
+      return false;
     }
   }
 }
