@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'profile_screen.dart';
 import 'add_food_screen.dart';
@@ -12,17 +13,22 @@ class MainHomeScreen extends StatefulWidget {
 
 class _MainHomeScreenState extends State<MainHomeScreen> {
   int _selectedIndex = 0;
+  DateTime _selectedDate = DateTime.now(); // 新增：当前选中的日期
 
   // 页面列表
-  late final List<Widget> _pages;
+  late List<Widget> _pages; // 移除final，便于刷新
 
   @override
   void initState() {
     super.initState();
+    _initPages();
+  }
+
+  void _initPages() {
     _pages = [
       _buildHomeContent(),
-      const Center(child: Text('饮食页面')), // 占位
-      const Center(child: Text('分析页面')), // 占位
+      const Center(child: Text('饮食页面')),
+      const Center(child: Text('分析页面')),
       const ProfileScreen(),
     ];
   }
@@ -50,12 +56,18 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
       ) : null,
       body: _pages[_selectedIndex],
       floatingActionButton: _selectedIndex == 0 ? FloatingActionButton(
-        onPressed: () {
-          // 导航到添加食物页面
-          Navigator.push(
+        onPressed: () async {
+          // 导航到添加食物页面，并监听返回值
+          final result = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AddFoodScreen()),
           );
+          // 关键：添加后返回true时刷新
+          if (result == true) {
+            setState(() {
+              _initPages(); // 重新生成页面，确保FutureBuilder刷新
+            });
+          }
         },
         backgroundColor: const Color(0xFF5B6AF5),
         elevation: 4,
@@ -122,6 +134,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
+          _buildDateSelector(), // 新增：日期选择器
+          const SizedBox(height: 8),
           _buildNutritionSummaryCard(),
           const SizedBox(height: 16),
           _buildHealthStatusCard(),
@@ -129,21 +143,65 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
           _buildNutritionAdviceCard(),
           const SizedBox(height: 16),
           _buildFoodListCard(),
-          const SizedBox(height: 80), // 为底部导航栏留出空间
+          const SizedBox(height: 80),
         ],
       ),
     );
   }
 
-  // 以下保留原有的所有卡片构建方法...
-  // _buildNutritionSummaryCard()
-  // _buildNutritionItem()
-  // _buildHealthStatusCard()
-  // _buildStatusItem()
-  // _buildNutritionAdviceCard()
-  // _buildAdviceItem()
-  // _buildFoodListCard()
-  // _buildFoodItem()
+  // 新增：日期选择器
+  Widget _buildDateSelector() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.chevron_left),
+          onPressed: () {
+            setState(() {
+              _selectedDate = _selectedDate.subtract(const Duration(days: 1));
+            });
+          },
+        ),
+        GestureDetector(
+          onTap: () async {
+            final picked = await showDatePicker(
+              context: context,
+              initialDate: _selectedDate,
+              firstDate: DateTime(2020),
+              lastDate: DateTime.now(),
+            );
+            if (picked != null) {
+              setState(() {
+                _selectedDate = picked;
+              });
+            }
+          },
+          child: Text(
+            "${_selectedDate.year}-${_selectedDate.month.toString().padLeft(2, '0')}-${_selectedDate.day.toString().padLeft(2, '0')}",
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.chevron_right),
+          onPressed: () {
+            if (!_isToday(_selectedDate)) {
+              setState(() {
+                _selectedDate = _selectedDate.add(const Duration(days: 1));
+              });
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  bool _isToday(DateTime date) {
+    final now = DateTime.now();
+    return date.year == now.year && date.month == now.month && date.day == now.day;
+  }
 
   // 今日营养摄入卡片
   Widget _buildNutritionSummaryCard() {
@@ -385,25 +443,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   // 食物列表卡片
   Widget _buildFoodListCard() {
-    // 推荐做法：将用户名保存在全局状态、Provider、GetX、shared_preferences等
-    // 这里举例用Provider（需在主入口用Provider包裹并传递用户信息）
-    //
-    // import 'package:provider/provider.dart';
-    // class UserModel with ChangeNotifier { String username; ... }
-    // 在主入口：ChangeNotifierProvider(create: (_) => UserModel(), child: MyApp())
-    //
-    // 然后这里获取：
-    // final username = Provider.of<UserModel>(context, listen: false).username;
-    //
-    // 如果用shared_preferences：
-    // final prefs = await SharedPreferences.getInstance();
-    // final username = prefs.getString('username') ?? '';
-    //
-    // 如果用GetX：
-    // final username = Get.find<UserController>().username;
-    //
-    // 临时写死：
     const username = "testuser";
+    final dateStr = "${_selectedDate.year}-${_selectedDate.month.toString().padLeft(2, '0')}-${_selectedDate.day.toString().padLeft(2, '0')}";
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -419,7 +460,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                 ),
                 const SizedBox(width: 8),
                 const Text(
-                  '今日已添加食物',
+                  '已添加食物',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -429,7 +470,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             ),
             const SizedBox(height: 16),
             FutureBuilder<Map<String, dynamic>>(
-              future: ApiService().fetchTodayMeals(username),
+              future: ApiService().fetchMealsByDate(username, dateStr),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -445,19 +486,21 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                   return const Center(child: Text('暂无食物记录'));
                 }
                 final meals = todayMeals['meals'];
-                List<dynamic> foods = [];
-                for (var mealKey in ['breakfast', 'lunch', 'dinner']) {
+                List<FoodItem> foodItems = [];
+                for (var mealKey in meals.keys) {
                   final meal = meals[mealKey];
                   if (meal != null && meal['foods'] != null && meal['foods'] is List) {
-                    foods.addAll(meal['foods']);
+                    for (var food in meal['foods']) {
+                      // mealKey 作为类型传递给 FoodItem
+                      foodItems.add(FoodItem.fromFastApi(food, mealKey));
+                    }
                   }
                 }
-                // 再次调试 foods
-                print('foods: $foods');
-                if (foods.isEmpty) {
+                if (foodItems.isEmpty) {
                   return const Center(child: Text('暂无食物记录'));
                 }
-                final foodItems = foods.map((item) => FoodItem.fromFastApi(item)).toList();
+                // 按添加顺序逆序显示，最新的在最上面
+                foodItems = foodItems.reversed.toList();
                 return Column(
                   children: [
                     for (int i = 0; i < foodItems.length; i++) ...[
@@ -465,6 +508,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                         foodItems[i].name,
                         foodItems[i].nutrition,
                         foodItems[i].calories,
+                        foodItems[i].imageBase64,
+                        foodItems[i].mealType, // 展示类型
                       ),
                       if (i != foodItems.length - 1) const Divider(height: 24),
                     ]
@@ -479,7 +524,30 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   }
 
   // 食物项目
-  Widget _buildFoodItem(String name, String nutrition, String calories) {
+  Widget _buildFoodItem(String name, String nutrition, String calories, [String? imageBase64, String? mealType]) {
+    Widget imageWidget;
+    String? pureBase64 = imageBase64;
+    if (pureBase64 != null && pureBase64.isNotEmpty) {
+      final regex = RegExp(r'data:image/[^;]+;base64,');
+      pureBase64 = pureBase64.replaceAll(regex, '');
+      try {
+        imageWidget = ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.memory(
+            base64Decode(pureBase64),
+            width: 48,
+            height: 48,
+            fit: BoxFit.cover,
+            errorBuilder: (ctx, err, stack) => const Icon(Icons.broken_image, color: Colors.grey),
+          ),
+        );
+      } catch (e) {
+        imageWidget = const Icon(Icons.broken_image, color: Colors.grey);
+      }
+    } else {
+      imageWidget = const Icon(Icons.image, color: Colors.grey);
+    }
+
     return Row(
       children: [
         Container(
@@ -489,19 +557,41 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             color: const Color(0xFFF3F4F6),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: const Icon(Icons.image, color: Colors.grey),
+          child: imageWidget,
         ),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                ),
+              Row(
+                children: [
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                    ),
+                  ),
+                  if (mealType != null) ...[
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF5B6AF5).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        mealType,
+                        style: const TextStyle(
+                          color: Color(0xFF5B6AF5),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ]
+                ],
               ),
               const SizedBox(height: 4),
               Text(
@@ -526,22 +616,59 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   }
 }
 
+// 修改FoodItem，增加mealType字段
 class FoodItem {
   final String name;
   final String nutrition;
   final String calories;
+  final String? imageBase64;
+  final String? mealType; // 新增
 
-  FoodItem({required this.name, required this.nutrition, required this.calories});
+  FoodItem({
+    required this.name,
+    required this.nutrition,
+    required this.calories,
+    this.imageBase64,
+    this.mealType,
+  });
 
-  factory FoodItem.fromFastApi(Map<String, dynamic> json) {
+  // mealTypeKey为早餐/午餐/晚餐/加餐的英文key
+  factory FoodItem.fromFastApi(Map<String, dynamic> json, [String? mealTypeKey]) {
     final nutritionMap = json['nutrition'] ?? {};
     String nutritionStr =
         '蛋白质: ${nutritionMap['protein'] ?? 0}g | 碳水: ${nutritionMap['carbon'] ?? 0}g | 脂肪: ${nutritionMap['fat'] ?? 0}g';
     String caloriesStr = '${nutritionMap['calories'] ?? 0} kcal';
+    String? imageBase64 = json['image_base64'];
+    if (imageBase64 == null && json['image'] != null && json['image']['base64'] != null) {
+      imageBase64 = json['image']['base64'];
+    }
+    if (imageBase64 != null && imageBase64.isEmpty) {
+      imageBase64 = null;
+    }
+    // mealTypeKey转带餐字
+    String? mealType;
+    switch (mealTypeKey) {
+      case '早':
+        mealType = '早餐';
+        break;
+      case '中':
+        mealType = '午餐';
+        break;
+      case '晚':
+        mealType = '晚餐';
+        break;
+      case '加':
+        mealType = '加餐';
+        break;
+      default:
+        mealType = mealTypeKey;
+    }
     return FoodItem(
       name: json['foodName'] ?? '',
       nutrition: nutritionStr,
       calories: caloriesStr,
+      imageBase64: imageBase64,
+      mealType: mealType,
     );
   }
 }

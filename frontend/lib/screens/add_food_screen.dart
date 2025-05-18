@@ -1,4 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../services/api_service.dart';
 
 class AddFoodScreen extends StatefulWidget {
   const AddFoodScreen({Key? key}) : super(key: key);
@@ -13,13 +19,15 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   final TextEditingController _proteinController = TextEditingController();
   final TextEditingController _carbsController = TextEditingController();
   final TextEditingController _fatController = TextEditingController();
-  
+
   String? _selectedMealType;
   bool _isPhotoMode = true;
   bool _isRecognizing = false;
   bool _isPhotoTaken = false;
-  
-  final List<String> _mealTypes = ['早餐', '午餐', '晚餐', '加餐'];
+  String? _imageBase64;
+  File? _imageFile;
+
+  final List<String> _mealTypes = ['早餐', '午餐', '晚餐', '加餐']; // 页面显示带餐字
 
   @override
   void dispose() {
@@ -137,7 +145,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   Widget _buildPhotoInput() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
-      height: 250,
+      height: 320,
       decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(16),
@@ -146,9 +154,28 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
           width: 1,
         ),
       ),
-      child: _isPhotoTaken
-          ? _buildPhotoPreview()
-          : _buildCameraPlaceholder(),
+      child: Column(
+        children: [
+          Expanded(
+            child: _isPhotoTaken
+                ? _buildPhotoPreview()
+                : _buildCameraPlaceholder(),
+          ),
+          // 新增：图片下方添加食物名称输入框
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: TextField(
+              controller: _foodNameController,
+              decoration: const InputDecoration(
+                labelText: '食物名称',
+                hintText: '请输入食物名称',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.restaurant_menu),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -175,18 +202,32 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildPhotoButton(Icons.camera_alt, '拍照', () {
-              setState(() {
-                _isPhotoTaken = true;
+            _buildPhotoButton(Icons.camera_alt, '拍照', () async {
+              final picker = ImagePicker();
+              final pickedFile = await picker.pickImage(source: ImageSource.camera, imageQuality: 80);
+              if (pickedFile != null) {
+                final bytes = await pickedFile.readAsBytes();
+                setState(() {
+                  _isPhotoTaken = true;
+                  _imageBase64 = base64Encode(bytes);
+                  _imageFile = File(pickedFile.path);
+                });
                 _simulatePhotoRecognition();
-              });
+              }
             }),
             const SizedBox(width: 24),
-            _buildPhotoButton(Icons.photo_library, '相册', () {
-              setState(() {
-                _isPhotoTaken = true;
+            _buildPhotoButton(Icons.photo_library, '相册', () async {
+              final picker = ImagePicker();
+              final pickedFile = await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+              if (pickedFile != null) {
+                final bytes = await pickedFile.readAsBytes();
+                setState(() {
+                  _isPhotoTaken = true;
+                  _imageBase64 = base64Encode(bytes);
+                  _imageFile = File(pickedFile.path);
+                });
                 _simulatePhotoRecognition();
-              });
+              }
             }),
           ],
         ),
@@ -230,7 +271,6 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   Widget _buildPhotoPreview() {
     return Stack(
       children: [
-        // 照片预览（这里使用占位符）
         Container(
           width: double.infinity,
           height: double.infinity,
@@ -259,11 +299,14 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                       ],
                     ),
                   )
-                : const Icon(
-                    Icons.image,
-                    size: 64,
-                    color: Colors.grey,
-                  ),
+                : (_imageBase64 != null
+                    ? Image.memory(
+                        base64Decode(_imageBase64!),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                      )
+                    : const Icon(Icons.image, size: 64, color: Colors.grey)),
           ),
         ),
         // 重拍按钮
@@ -275,6 +318,8 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
               setState(() {
                 _isPhotoTaken = false;
                 _isRecognizing = false;
+                _imageFile = null;
+                _imageBase64 = null;
                 // 清空识别结果
                 _foodNameController.clear();
                 _caloriesController.clear();
@@ -306,7 +351,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
     setState(() {
       _isRecognizing = true;
     });
-    
+
     // 模拟识别延迟
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
@@ -538,9 +583,51 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           // 这里添加保存食物的逻辑
-          Navigator.of(context).pop();
+          final username = "testuser"; // 实际应从全局或登录获取
+          final foodName = _foodNameController.text;
+          final calories = double.tryParse(_caloriesController.text) ?? 0;
+          final protein = double.tryParse(_proteinController.text) ?? 0;
+          final carbon = double.tryParse(_carbsController.text) ?? 0;
+          final fat = double.tryParse(_fatController.text) ?? 0;
+          final mealType = _selectedMealType; // 仍然是'早餐'等
+          final imageBase64 = _imageBase64 ?? "";
+
+          if (foodName.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('请填写食物名称')),
+            );
+            return;
+          }
+          if (mealType == null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('请选择餐食类型')),
+            );
+            return;
+          }
+          // 只传给后端时去掉餐字
+          String mealTypeForBackend = mealType.replaceAll('餐', '');
+          final success = await ApiService().uploadFoodRecord(
+            username: username,
+            foodName: foodName,
+            protein: protein,
+            fat: fat,
+            carbon: carbon,
+            calorie: calories,
+            time: mealTypeForBackend, // 只传'早'/'中'/'晚'/'加'
+            imageBase64: imageBase64,
+          );
+          if (success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('上传成功')),
+            );
+            Navigator.of(context).pop(true); // 返回true，主页可刷新
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('上传失败')),
+            );
+          }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF5B6AF5),

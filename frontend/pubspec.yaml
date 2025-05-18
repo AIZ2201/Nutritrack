@@ -8,10 +8,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   # 添加你需要的依赖项
   cupertino_icons: ^1.0.2
   http: ^1.4.0
+  image_picker: ^1.0.4
 
 dev_dependencies:
   flutter_test:
