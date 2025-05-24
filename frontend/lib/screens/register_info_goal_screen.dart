@@ -3,9 +3,23 @@ import 'register_info_body_screen.dart';
 import 'register_info_muscle_screen.dart';
 import 'register_info_maintain_screen.dart';
 import 'register_info_disease_screen.dart';
+import 'main_home_screen.dart'; // 新增导入
+import '../services/api_service.dart'; // 导入 ApiService
 
 class RegisterInfoGoalScreen extends StatefulWidget {
-  const RegisterInfoGoalScreen({super.key});
+  final String username;
+  final String name;
+  final String gender;
+  final String birth_date; // 改为 birth_date
+  final String region;
+  const RegisterInfoGoalScreen({
+    super.key,
+    required this.username,
+    required this.name,
+    required this.gender,
+    required this.birth_date, // 改为 birth_date
+    required this.region,
+  });
 
   @override
   State<RegisterInfoGoalScreen> createState() => _RegisterInfoGoalScreenState();
@@ -26,32 +40,86 @@ class _RegisterInfoGoalScreenState extends State<RegisterInfoGoalScreen> {
     setState(() {
       _selectedIndex = index;
     });
-    // 跳转逻辑
-    if (goals[index] == "减脂减重") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const RegisterInfoBodyScreen()),
-      );
-    } else if (goals[index] == "增肌") {
+    final goal = goals[index];
+    if (goal == "减脂减重") {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const RegisterInfoMuscleScreen()),
+          builder: (context) => RegisterInfoBodyScreen(
+            username: widget.username,
+            name: widget.name,
+            gender: widget.gender,
+            birth_date: widget.birth_date,
+            region: widget.region,
+            goal: goal,
+          ),
+        ),
       );
-    } else if (goals[index] == "维持体重") {
+    } else if (goal == "增肌") {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const RegisterInfoMaintainScreen()),
+          builder: (context) => RegisterInfoMuscleScreen(
+            username: widget.username,
+            name: widget.name,
+            gender: widget.gender,
+            birth_date: widget.birth_date,
+            region: widget.region,
+            goal: goal,
+          ),
+        ),
       );
-    } else if (goals[index] == "控制疾病") {
+    } else if (goal == "维持体重") {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const RegisterInfoDiseaseScreen()),
+          builder: (context) => RegisterInfoMaintainScreen(
+            username: widget.username,
+            name: widget.name,
+            gender: widget.gender,
+            birth_date: widget.birth_date,
+            region: widget.region,
+            goal: goal,
+          ),
+        ),
       );
+    } else if (goal == "控制疾病") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RegisterInfoDiseaseScreen(
+            username: widget.username,
+            name: widget.name,
+            gender: widget.gender,
+            birth_date: widget.birth_date,
+            region: widget.region,
+            goal: goal,
+          ),
+        ),
+      );
+    } else if (goal == "改善消化") {
+      // 直接补全信息并跳转主页
+      final ApiService _apiService = ApiService();
+      final Map<String, dynamic> data = {
+        "username": widget.username,
+        "name": widget.name,
+        "gender": widget.gender,
+        "birth_date": widget.birth_date,
+        "region": widget.region,
+        "goal": goal,
+      };
+      _apiService.completeRegisterInfo(data).then((result) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainHomeScreen(
+                // 可传递参数
+                ),
+          ),
+          (route) => false,
+        );
+      });
     }
-    // "改善消化" 不跳转
   }
 
   @override

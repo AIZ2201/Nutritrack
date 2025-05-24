@@ -17,7 +17,7 @@ class ApiService {
       case BackendMode.local:
         return 'http://192.168.1.100:8000'; // 本地模式地址
       case BackendMode.remote:
-        return 'http://10.208.100.52:8000'; // 异地模式地址
+        return 'http://10.203.180.154:8000'; // 异地模式地址
       case BackendMode.server:
         return 'http://123.60.149.85:8000'; // 服务器模式地址
     }
@@ -67,10 +67,9 @@ class ApiService {
     }
   }
 
-
-
   /// 获取指定日期的食物卡片内容
-  Future<Map<String, dynamic>> fetchMealsByDate(String username, String date) async {
+  Future<Map<String, dynamic>> fetchMealsByDate(
+      String username, String date) async {
     final baseUrl = _getBaseUrl();
     final url = '$baseUrl/homePage/todayMeals';
     final requestBody = json.encode({'username': username, 'date': date});
@@ -119,6 +118,61 @@ class ApiService {
     } else {
       print('上传失败: ${response.body}');
       return false;
+    }
+  }
+
+  /// 注册账号
+  Future<Map<String, dynamic>> register(
+      String username, String password) async {
+    final baseUrl = _getBaseUrl();
+    final requestBody = json.encode({
+      'username': username,
+      'password': password,
+    });
+
+    print("发送注册请求到: $baseUrl/register?step=1");
+    print("请求体: $requestBody");
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/register?step=1'),
+      headers: {'Content-Type': 'application/json'},
+      body: requestBody,
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+      print("注册返回: $responseBody");
+      return {"success": true, "message": responseBody['message']};
+    } else {
+      print("注册失败: ${response.body}");
+      return {"success": false, "message": "注册失败: ${response.body}"};
+    }
+  }
+
+  /// 注册信息补全
+  Future<Map<String, dynamic>> completeRegisterInfo(
+      Map<String, dynamic> info) async {
+    final baseUrl = _getBaseUrl();
+    final Map<String, dynamic> infoWithUsername = Map<String, dynamic>.from(info);
+    // 确保username字段存在（调用时需传入）
+    final requestBody = json.encode(infoWithUsername);
+
+    print("发送注册信息补全请求到: $baseUrl/register?step=2");
+    print("请求体: $requestBody");
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/register?step=2'),
+      headers: {'Content-Type': 'application/json'},
+      body: requestBody,
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+      print("补全返回: $responseBody");
+      return {"success": true, "message": responseBody['message']};
+    } else {
+      print("补全失败: ${response.body}");
+      return {"success": false, "message": "补全失败: ${response.body}"};
     }
   }
 }

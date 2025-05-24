@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
+import 'main_home_screen.dart'; // 新增导入
 
 class RegisterInfoDiseaseScreen extends StatefulWidget {
-  const RegisterInfoDiseaseScreen({super.key});
+  final String username;
+  final String name;
+  final String gender;
+  final String birth_date; // 改为 birth_date
+  final String region;
+  final String goal;
+  const RegisterInfoDiseaseScreen({
+    super.key,
+    required this.username,
+    required this.name,
+    required this.gender,
+    required this.birth_date, // 改为 birth_date
+    required this.region,
+    required this.goal,
+  });
 
   @override
   State<RegisterInfoDiseaseScreen> createState() =>
@@ -11,6 +27,41 @@ class RegisterInfoDiseaseScreen extends StatefulWidget {
 class _RegisterInfoDiseaseScreenState extends State<RegisterInfoDiseaseScreen> {
   final TextEditingController _diseaseController = TextEditingController();
   final TextEditingController _allergyController = TextEditingController();
+
+  final ApiService _apiService = ApiService();
+
+  void _submit() async {
+    final disease = _diseaseController.text.trim();
+    final allergy = _allergyController.text.trim();
+    if (disease.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('请填写疾病类型')),
+      );
+      return;
+    }
+    final Map<String, dynamic> data = {
+      "username": widget.username,
+      "name": widget.name,
+      "gender": widget.gender,
+      "birth_date": widget.birth_date, // 改为 birth_date
+      "region": widget.region,
+      "goal": widget.goal,
+      "disease": disease,
+      "allergy": allergy,
+    };
+    final result = await _apiService.completeRegisterInfo(data);
+    if (result['success'] == true) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const MainHomeScreen()),
+        (route) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result['message'] ?? '提交失败')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,9 +209,7 @@ class _RegisterInfoDiseaseScreenState extends State<RegisterInfoDiseaseScreen> {
                       // 下一步按钮
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
-                            // 下一步逻辑（可跳转到注册完成或其他页面）
-                          },
+                          onPressed: _submit,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: lightBlue,
                             shape: RoundedRectangleBorder(
