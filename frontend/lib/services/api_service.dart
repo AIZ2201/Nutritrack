@@ -10,7 +10,7 @@ class ApiService {
   final BackendMode backendMode;
 
   // 修改默认模式为 remote
-  ApiService({this.backendMode = BackendMode.remote}); // 后端模式（可切换）
+  ApiService({this.backendMode = BackendMode.server}); // 后端模式（可切换）
 
   String _getBaseUrl() {
     switch (backendMode) {
@@ -153,7 +153,8 @@ class ApiService {
   Future<Map<String, dynamic>> completeRegisterInfo(
       Map<String, dynamic> info) async {
     final baseUrl = _getBaseUrl();
-    final Map<String, dynamic> infoWithUsername = Map<String, dynamic>.from(info);
+    final Map<String, dynamic> infoWithUsername =
+        Map<String, dynamic>.from(info);
     // 确保username字段存在（调用时需传入）
     final requestBody = json.encode(infoWithUsername);
 

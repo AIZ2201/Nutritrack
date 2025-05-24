@@ -438,3 +438,7 @@
 2025-05-24 07:02:55.890: [INFO] Sync initialization duration: 2281ms
 2025-05-24 07:52:28.066: [INFO] VisibilityChanged: 1
 2025-05-24 07:52:45.322: [INFO] VisibilityChanged: 0
+2025-05-24 09:02:08.031: [INFO] VisibilityChanged: 0
+2025-05-24 09:02:08.098: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2025-05-24 09:02:08.098: [INFO] OnDoneLoading sync enabled: 1
+2025-05-24 09:02:38.959: [INFO] Sync initialization duration: 30417ms
