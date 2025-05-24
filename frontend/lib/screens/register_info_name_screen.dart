@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'register_info_profile_screen.dart';
 
 class RegisterInfoNameScreen extends StatefulWidget {
-  const RegisterInfoNameScreen({super.key});
+  final String username;
+  const RegisterInfoNameScreen({super.key, required this.username});
 
   @override
   State<RegisterInfoNameScreen> createState() => _RegisterInfoNameScreenState();
@@ -124,11 +125,20 @@ class _RegisterInfoNameScreenState extends State<RegisterInfoNameScreen> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
+                            final name = _nameController.text.trim();
+                            if (name.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('请输入姓名')),
+                              );
+                              return;
+                            }
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    const RegisterInfoProfileScreen(),
+                                builder: (context) => RegisterInfoProfileScreen(
+                                  username: widget.username, // 传递username
+                                  name: name,
+                                ),
                               ),
                             );
                           },

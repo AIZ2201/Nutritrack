@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'register_info_name_screen.dart'; // 新增导入
+import '../services/api_service.dart'; // 新增导入
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -12,14 +13,49 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _register() {
-    // 跳转到信息采集第一页
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const RegisterInfoNameScreen(),
-      ),
-    );
+  final ApiService _apiService = ApiService(); // 新增ApiService实例
+
+  bool _isLoading = false; // 注册加载状态
+
+  void _register() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text.trim();
+
+    // 调用注册API
+    final result = await _apiService.register(username, password);
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (result['success'] == true) {
+      // 跳转到信息采集第一页
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RegisterInfoNameScreen(
+            username: username, // 传递username
+          ),
+        ),
+      );
+    } else {
+      // 注册失败，弹窗提示
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('注册失败'),
+          content: Text(result['message'] ?? '请重试'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('确定'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override
@@ -115,7 +151,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(
                     height: 48,
                     child: ElevatedButton(
-                      onPressed: _register,
+                      onPressed: _isLoading ? null : _register, // 禁用时不可点击
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
@@ -123,15 +159,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         elevation: 0,
                       ),
-                      child: const Text(
-                        "注册",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2,
-                        ),
-                      ),
+                      child: _isLoading
+                          ? const CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                            )
+                          : const Text(
+                              "注册",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2,
+                              ),
+                            ),
                     ),
                   ),
                   const SizedBox(height: 28),

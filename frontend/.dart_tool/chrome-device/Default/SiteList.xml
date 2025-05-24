@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<site-list version="69">
+<site-list version="97">
  <site url="0rga.org">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
@@ -1030,9 +1030,6 @@
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
  <site url="appro.ae">
-  <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="apps.office.com">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
  <site url="apps.outstem.io">
@@ -4689,9 +4686,6 @@
  <site url="cpa.mynavi.jp">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
- <site url="cpc.geely.com">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
  <site url="cpdhub.co">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
@@ -4778,9 +4772,6 @@
  </site>
  <site url="criterionpic.com">
   <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="crm.milkt.co.kr">
-  <open-in allow-redirect="true">IE11</open-in>
  </site>
  <site url="crm10.dynamics.com">
   <open-in allow-redirect="true">MSEdge</open-in>
@@ -5769,12 +5760,6 @@
  <site url="eatonshillss.eq.edu.au">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
- <site url="ebank.gx966888.com/pb_jump.html">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="ebank.tzbank.com">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
  <site url="ebino-kankou.com">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
@@ -6168,9 +6153,6 @@
  <site url="eromangass.eq.edu.au">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
- <site url="erp.samsungfire.com">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
  <site url="ers.hjit.co.kr:90">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
@@ -6352,9 +6334,6 @@
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
  <site url="exactrealty.co.uk">
-  <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="excel.office.com">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
  <site url="exchangemarketplace.com">
@@ -7724,9 +7703,6 @@
  </site>
  <site url="generatewealth.co.nz">
   <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="genesis.tempstaff.co.jp">
-  <open-in allow-redirect="true">IE11</open-in>
  </site>
  <site url="geniebook.com">
   <open-in allow-redirect="true">MSEdge</open-in>
@@ -9198,9 +9174,6 @@
  <site url="hy-vee.com">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
- <site url="hy.seiip.com/sesi">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
  <site url="hybridwork.cybozu.co.jp">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
@@ -9246,10 +9219,6 @@
  <site url="ib.thefmbank.com">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
- <site url="ibank.bankofshanghai.com">
-  <compat-mode>IE8</compat-mode>
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
  <site url="ibanking.foresight.bank">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
@@ -9279,9 +9248,6 @@
  </site>
  <site url="icloud.com">
   <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="icoa.cn/mov">
-  <open-in allow-redirect="true">IE11</open-in>
  </site>
  <site url="icouch.me">
   <open-in allow-redirect="true">MSEdge</open-in>
@@ -10249,10 +10215,6 @@
  <site url="jrss13.com">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
- <site url="js96008.com">
-  <compat-mode>IE8</compat-mode>
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
  <site url="jshosting.co.uk">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
@@ -10786,9 +10748,6 @@
  </site>
  <site url="kmong.com">
   <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="kms.chamc.com.cn">
-  <open-in allow-redirect="true">IE11</open-in>
  </site>
  <site url="knowbe4.com">
   <open-in allow-redirect="true">MSEdge</open-in>
@@ -11980,9 +11939,6 @@
  </site>
  <site url="mail.google.com">
   <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="mail.on-nara.go.kr">
-  <open-in allow-redirect="true">IE11</open-in>
  </site>
  <site url="mail.yahoo.com">
   <open-in allow-redirect="true">MSEdge</open-in>
@@ -13400,9 +13356,6 @@
  <site url="myengage360.com">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
- <site url="myerp.countrygarden.com.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
  <site url="myeschoolhome.com">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
@@ -13675,9 +13628,6 @@
  </site>
  <site url="neilson.co.uk">
   <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="neis.goe.go.kr">
-  <open-in allow-redirect="true">IE11</open-in>
  </site>
  <site url="nejremeslnici.cz">
   <open-in allow-redirect="true">MSEdge</open-in>
@@ -14504,15 +14454,6 @@
  <site url="outletcity.com">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
- <site url="outlook.live.com">
-  <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="outlook.office.com">
-  <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="outlook.office365.com">
-  <open-in allow-redirect="true">MSEdge</open-in>
- </site>
  <site url="oventure.co.jp">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
@@ -14617,9 +14558,6 @@
  </site>
  <site url="pantaya.com">
   <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="paperless.quantatw.com">
-  <open-in allow-redirect="true">IE11</open-in>
  </site>
  <site url="paperlounge.de">
   <open-in allow-redirect="true">MSEdge</open-in>
@@ -15243,9 +15181,6 @@
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
  <site url="powerplace.co.jp">
-  <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="powerpoint.office.com">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
  <site url="powersystemstoday.co.uk">
@@ -17146,9 +17081,6 @@
  </site>
  <site url="skylawnmemorialpark.com">
   <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="skynet.skhynix.com">
-  <open-in allow-redirect="true">IE11</open-in>
  </site>
  <site url="skypeer.tokuiku.org">
   <open-in allow-redirect="true">MSEdge</open-in>
@@ -19814,9 +19746,6 @@
  <site url="virtualvisitwaiting.partners.org">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
- <site url="visio.office.com">
-  <open-in allow-redirect="true">MSEdge</open-in>
- </site>
  <site url="visionproducts.us">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
@@ -20360,9 +20289,6 @@
  <site url="whproperties.co.za">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
- <site url="whsggzy.wuhu.gov.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
  <site url="widebayschoolsport.eq.edu.au">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
@@ -20592,9 +20518,6 @@
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
  <site url="wooroolinss.eq.edu.au">
-  <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="word.office.com">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
  <site url="wordclouds.com">
@@ -21077,9 +21000,6 @@
  <site url="www.anwalt.de/login">
   <open-in allow-redirect="true">NEUTRAL</open-in>
  </site>
- <site url="www.apollon.local">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
  <site url="www.arenadannero.se">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
@@ -21478,9 +21398,6 @@
  </site>
  <site url="www.esri.com">
   <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="www.etrading.cn">
-  <open-in allow-redirect="true">IE11</open-in>
  </site>
  <site url="www.exso.no">
   <open-in allow-redirect="true">MSEdge</open-in>
@@ -22166,17 +22083,11 @@
  <site url="www.nysra.org">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
- <site url="www.office.com">
-  <open-in allow-redirect="true">MSEdge</open-in>
- </site>
  <site url="www.okishokyo.com">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
  <site url="www.omig.com/agencyaccess">
   <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="www.on-nara.go.kr">
-  <open-in allow-redirect="true">IE11</open-in>
  </site>
  <site url="www.order-cheese.co.jp">
   <open-in allow-redirect="true">MSEdge</open-in>
@@ -22657,9 +22568,6 @@
  </site>
  <site url="www.volgistics.com">
   <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="www.w4c.go.kr">
-  <open-in allow-redirect="true">IE11</open-in>
  </site>
  <site url="www.wardsofkent.co.uk">
   <open-in allow-redirect="true">MSEdge</open-in>
@@ -23213,9 +23121,6 @@
  <site url="zarion.com">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
- <site url="zcoas.zoomx.net/zcoas">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
  <site url="zenjukyo.gr.jp">
   <open-in allow-redirect="true">MSEdge</open-in>
  </site>
@@ -23293,733 +23198,5 @@
  </site>
  <site url="zyrtec.com">
   <open-in allow-redirect="true">MSEdge</open-in>
- </site>
- <site url="http://app.honglitronic.com:8009/efnet">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://bssupplier.soma.hk">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://cmp.tfcn.com.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://crm.kehua.com:8010">
-  <compat-mode>IE7</compat-mode>
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://erp.panemirates.ae:8181">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://jzsgl.coc.gov.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://mh.wut.edu.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://oa.djtu.edu.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://oa.ranken.com.cn/services">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://oa.zgysqy.com:8888/services">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://pmzq.auction.artron.net/pmzq/christies2012">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://tfcmp.tfcn.com.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://u-channel.samsunglife.com">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://www.4399.com/flash/32979.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://www.4399.com/flash/48399.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://www.4399.com/flash/seer.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="http://xjxtczyh.xtczyh.com">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://17roco.qq.com">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://cnpos.chowsangsang.com">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://co.hfbank.com.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://connectplus.samsunglife.com:10443">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://connectplus.samsunglife.com:7443">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://corporatebank.bjrcb.com">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://dbank.hxb.com.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://dm.ynby.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://ebank.ynrcc.com">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://erp-ep.samsunglife.com">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://firmadigital.scba.gov.ar">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://free.icoa.cn/v">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://ga.samsunglife.com">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://grdms.bit.edu.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://i-hn.meiyijia.com.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://ibank.bankofdl.com">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://ie-help.llschain.com">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://jy.sdada.edu.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://klef.gbe.kr">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://klef.gne.go.kr">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://klef.goe.go.kr">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://klef.sen.go.kr">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://my.4399.com/yxmsdzls">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://news.4399.com/aoqi">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://news.4399.com/aoyazhiguang">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://news.4399.com/hxjy">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://news.4399.com/pikatang">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://news.4399.com/qiu">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://nper.cmbc.com.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://rfid.chowtaifook.sz">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://sbank.hxb.com.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://ssjj.4399.com">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://uk.pinewooddms.training">
-  <compat-mode>IE8</compat-mode>
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://v.beeb.com.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/100030_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/10305_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/10379.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/10379_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/107884_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/109832_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/110975_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/112689_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/115339_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/117227_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/117945_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/118852_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/122099_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/12669_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/127539_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/130389_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/130396.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/130396_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/132028.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/133630_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/134302_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/136516_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/137116_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/137953_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/1382_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/145991_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/151915_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/155283_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/155476_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/15548_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/160944_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/163478_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/171322_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/173634_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/177937_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/17801_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/18012.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/18012_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/180977_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/18169_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/187040_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/187228_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/188593.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/188739_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/189558_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/191203_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/195673_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/195990_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/198491_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/198637_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/198660_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/199408_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/202061_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/202574_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/202604_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/202692_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/202724_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/202785.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/202819_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/202828_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/202901_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/202907_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/202911_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203018_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203093_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203152.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203153_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203154.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203166_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203178_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203215_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203231_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203369_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203371_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203404_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203453_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203476_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203481_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203495_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203515_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203564_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203682_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/203768_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/204044_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/204056_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/204206.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/204255_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/204290_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/204422_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/204429_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/204562_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/204650_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/204685_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/204886_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/204926_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/204952_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/204989_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/205090_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/205147.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/205165.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/205182.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/205235_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/205325_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/205341_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/205462_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/205536_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/205551_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/205845_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/206114_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/20660_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/206724_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/207195_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/207717_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/208107_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/209567_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/210650_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/212767_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/21552_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/216417_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/21674_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/217370_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/217603_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/217622_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/217629_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/217706_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/217815_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/217844_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/217855_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/217926_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/218066_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/218162_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/218717_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/218860_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/218939_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/220266_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/221162_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/221700_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/221839_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/222061_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/222151_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/222442_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/22287_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/223745.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/223745_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/225193_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/227465_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/230446_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/231814_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/27924.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/27924_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/32979_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/35538.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/35538_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/3881_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/3883_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/39379_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/40779_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/41193_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/42760_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/43689_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/43841_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/47931_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/48272_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/48504.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/48504_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/55146_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/59227_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/60369_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/6232_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/63805_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/65731_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/69112_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/69156_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/70215_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/72526_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/73386.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/776_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/79452_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/81895_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/83345_4.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/85646_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/87425_2.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/88902_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/90302_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/93015_1.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/93398_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/93551_3.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/yzzrhj.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.4399.com/flash/zmhj.htm">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.xjrccb.com.cn">
-  <open-in allow-redirect="true">IE11</open-in>
- </site>
- <site url="https://www.yljr.com">
-  <open-in allow-redirect="true">IE11</open-in>
  </site>
 </site-list>

@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
+import 'main_home_screen.dart'; // 新增导入
 
 class RegisterInfoBodyScreen extends StatefulWidget {
-  const RegisterInfoBodyScreen({super.key});
+  final String username;
+  final String name;
+  final String gender;
+  final String birth_date; // 改为 birth_date
+  final String region;
+  final String goal;
+  const RegisterInfoBodyScreen({
+    super.key,
+    required this.username,
+    required this.name,
+    required this.gender,
+    required this.birth_date, // 改为 birth_date
+    required this.region,
+    required this.goal,
+  });
 
   @override
   State<RegisterInfoBodyScreen> createState() => _RegisterInfoBodyScreenState();
@@ -11,6 +27,44 @@ class _RegisterInfoBodyScreenState extends State<RegisterInfoBodyScreen> {
   final TextEditingController _heightController = TextEditingController();
   final TextEditingController _weightController = TextEditingController();
   final TextEditingController _targetWeightController = TextEditingController();
+
+  final ApiService _apiService = ApiService();
+
+  void _submit() async {
+    final height = _heightController.text.trim();
+    final weight = _weightController.text.trim();
+    final targetWeight = _targetWeightController.text.trim();
+    if (height.isEmpty || weight.isEmpty || targetWeight.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('请填写所有信息')),
+      );
+      return;
+    }
+    final Map<String, dynamic> data = {
+      "username": widget.username,
+      "name": widget.name,
+      "gender": widget.gender,
+      "birth_date": widget.birth_date, // 改为 birth_date
+      "region": widget.region,
+      "goal": widget.goal,
+      "height": height,
+      "weight": weight,
+      "target_weight": targetWeight, // 字段名改为 target_weight
+    };
+    final result = await _apiService.completeRegisterInfo(data);
+    if (result['success'] == true) {
+      // 注册信息补全成功，跳转到主页面
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const MainHomeScreen()),
+        (route) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result['message'] ?? '提交失败')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,9 +244,7 @@ class _RegisterInfoBodyScreenState extends State<RegisterInfoBodyScreen> {
                       // 下一步按钮
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
-                            // 下一步逻辑（可跳转到注册完成或其他页面）
-                          },
+                          onPressed: _submit,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: lightBlue,
                             shape: RoundedRectangleBorder(

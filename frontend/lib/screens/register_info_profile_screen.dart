@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'register_info_goal_screen.dart';
 
 class RegisterInfoProfileScreen extends StatefulWidget {
-  const RegisterInfoProfileScreen({super.key});
+  final String username;
+  final String name;
+  const RegisterInfoProfileScreen(
+      {super.key, required this.username, required this.name});
 
   @override
   State<RegisterInfoProfileScreen> createState() =>
@@ -210,11 +213,38 @@ class _RegisterInfoProfileScreenState extends State<RegisterInfoProfileScreen> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
+                            if (_gender == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('请选择性别')),
+                              );
+                              return;
+                            }
+                            final birthDate = _birthController.text.trim();
+                            final region = _regionController.text.trim();
+                            if (birthDate.isEmpty || region.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('请填写出生年月和地区')),
+                              );
+                              return;
+                            }
+                            final dateReg = RegExp(r'^\d{4}-\d{2}-\d{2}$');
+                            if (!dateReg.hasMatch(birthDate)) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('出生日期格式应为yyyy-MM-dd')),
+                              );
+                              return;
+                            }
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    const RegisterInfoGoalScreen(),
+                                builder: (context) => RegisterInfoGoalScreen(
+                                  username: widget.username,
+                                  name: widget.name,
+                                  gender: _gender!,
+                                  birth_date: birthDate,
+                                  region: region,
+                                ),
                               ),
                             );
                           },
