@@ -446,3 +446,48 @@
 2025-05-24 09:21:09.938: [INFO] BookmarkModelLoaded, ids_reassigned: 0
 2025-05-24 09:21:09.938: [INFO] OnDoneLoading sync enabled: 1
 2025-05-24 09:21:12.784: [INFO] Sync initialization duration: 2394ms
+2025-05-28 12:29:22.251: [INFO] VisibilityChanged: 0
+2025-05-28 12:29:22.291: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-28 12:29:22.291: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-28 12:29:22.291: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2025-05-28 12:29:22.291: [INFO] OnDoneLoading sync enabled: 0
+2025-05-28 12:32:39.224: [INFO] VisibilityChanged: 0
+2025-05-28 12:32:39.258: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-28 12:32:39.258: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-28 12:32:39.258: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2025-05-28 12:32:39.258: [INFO] OnDoneLoading sync enabled: 0
+2025-05-28 13:05:40.532: [INFO] VisibilityChanged: 0
+2025-05-28 13:05:40.591: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-28 13:05:40.591: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-28 13:05:40.591: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2025-05-28 13:05:40.591: [INFO] OnDoneLoading sync enabled: 0
+2025-05-29 05:08:48.253: [INFO] VisibilityChanged: 0
+2025-05-29 05:08:48.307: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-29 05:08:48.307: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-29 05:08:48.307: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2025-05-29 05:08:48.307: [INFO] OnDoneLoading sync enabled: 0
+2025-05-29 05:13:54.079: [INFO] VisibilityChanged: 0
+2025-05-29 05:13:54.114: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-29 05:13:54.114: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-29 05:13:54.114: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2025-05-29 05:13:54.114: [INFO] OnDoneLoading sync enabled: 0
+2025-05-29 07:55:33.138: [INFO] VisibilityChanged: 0
+2025-05-29 07:55:33.177: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-29 07:55:33.177: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-29 07:55:33.177: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2025-05-29 07:55:33.177: [INFO] OnDoneLoading sync enabled: 0
+2025-05-29 07:59:32.653: [INFO] VisibilityChanged: 0
+2025-05-29 07:59:32.704: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-29 07:59:32.705: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-29 07:59:32.705: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2025-05-29 07:59:32.705: [INFO] OnDoneLoading sync enabled: 0
+2025-05-29 08:11:55.931: [INFO] VisibilityChanged: 0
+2025-05-29 08:11:55.968: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-29 08:11:55.968: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-29 08:11:55.968: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2025-05-29 08:11:55.968: [INFO] OnDoneLoading sync enabled: 0
+2025-05-30 01:54:36.911: [INFO] VisibilityChanged: 0
+2025-05-30 01:54:36.947: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-30 01:54:36.947: [INFO] BookmarkNodeAdded, ABU: 0
+2025-05-30 01:54:36.947: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2025-05-30 01:54:36.947: [INFO] OnDoneLoading sync enabled: 0
