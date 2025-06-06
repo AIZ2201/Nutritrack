@@ -10,49 +10,45 @@ class ApiService {
   final BackendMode backendMode;
 
   // 修改默认模式为 remote
-  ApiService({this.backendMode = BackendMode.server}); // 后端模式（可切换）
+  ApiService({this.backendMode = BackendMode.remote}); // 后端模式（可切换）
 
   String _getBaseUrl() {
     switch (backendMode) {
       case BackendMode.local:
         return 'http://192.168.1.100:8000'; // 本地模式地址
       case BackendMode.remote:
-        return 'http://10.203.180.154:8000'; // 异地模式地址
+        return 'http://10.208.76.42:8000'; // 异地模式地址
       case BackendMode.server:
         return 'http://123.60.149.85:8000'; // 服务器模式地址
     }
   }
 
   Future<Map<String, dynamic>> login(String username, String password) async {
-    if (backendMode == BackendMode.local && useMock) {
-      return _mockLogin(username, password);
-    } else {
-      final baseUrl = _getBaseUrl(); // 根据模式获取后端地址
-      final requestBody = json
-          .encode({'username': username, 'password': password}); // 构建 JSON 数据
-      print("发送请求到: $baseUrl/auth/login"); // 打印请求地址
-      print("请求体: $requestBody"); // 打印 JSON 包
+    final baseUrl = _getBaseUrl(); // 根据模式获取后端地址
+    final requestBody =
+        json.encode({'username': username, 'password': password}); // 构建 JSON 数据
+    print("发送请求到: $baseUrl/auth/login"); // 打印请求地址
+    print("请求体: $requestBody"); // 打印 JSON 包
 
-      final response = await http.post(
-        Uri.parse('$baseUrl/auth/login'), // 动态拼接地址
-        headers: {'Content-Type': 'application/json'}, // 设置请求头
-        body: requestBody, // 发送 JSON 数据
-      );
-      if (response.statusCode == 200) {
-        final responseBody = jsonDecode(response.body);
-        print("后端返回: $responseBody"); // 调试输出
-        // 返回完整的响应数据，包括 message 和 role
-        return {
-          "success": responseBody['message'] == "login_successful!",
-          "role": responseBody['role']
-        };
-      } else if (response.statusCode == 401) {
-        // 处理用户名或密码错误的情况
-        print("登录失败: Invalid username or password");
-        return {"success": false, "role": null};
-      } else {
-        throw Exception('登录失败: ${response.body}');
-      }
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/login'), // 动态拼接地址
+      headers: {'Content-Type': 'application/json'}, // 设置请求头
+      body: requestBody, // 发送 JSON 数据
+    );
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+      print("后端返回: $responseBody"); // 调试输出
+      // 返回完整的响应数据，包括 message 和 role
+      return {
+        "success": responseBody['message'] == "login_successful",
+        "role": responseBody['role']
+      };
+    } else if (response.statusCode == 401) {
+      // 处理用户名或密码错误的情况
+      print("登录失败: Invalid username or password");
+      return {"success": false, "role": null};
+    } else {
+      throw Exception('登录失败: ${response.body}');
     }
   }
 
@@ -128,6 +124,7 @@ class ApiService {
     final requestBody = json.encode({
       'username': username,
       'password': password,
+      'role': 'user', // 新增role字段，默认user
     });
 
     print("发送注册请求到: $baseUrl/register?step=1");
@@ -145,7 +142,15 @@ class ApiService {
       return {"success": true, "message": responseBody['message']};
     } else {
       print("注册失败: ${response.body}");
-      return {"success": false, "message": "注册失败: ${response.body}"};
+      // 兼容fastapi detail字段
+      String msg = "注册失败: ${response.body}";
+      try {
+        final body = jsonDecode(response.body);
+        if (body is Map && body.containsKey('detail')) {
+          msg = body['detail'].toString();
+        }
+      } catch (_) {}
+      return {"success": false, "message": msg};
     }
   }
 
@@ -173,7 +178,14 @@ class ApiService {
       return {"success": true, "message": responseBody['message']};
     } else {
       print("补全失败: ${response.body}");
-      return {"success": false, "message": "补全失败: ${response.body}"};
+      String msg = "补全失败: ${response.body}";
+      try {
+        final body = jsonDecode(response.body);
+        if (body is Map && body.containsKey('detail')) {
+          msg = body['detail'].toString();
+        }
+      } catch (_) {}
+      return {"success": false, "message": msg};
     }
   }
 
@@ -182,11 +194,13 @@ class ApiService {
     final baseUrl = _getBaseUrl();
     final url = '$baseUrl/analysis/insight';
     final requestBody = json.encode({'username': username});
+    print('发送到后端的信息: $requestBody'); // 打印发送内容
     final response = await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
       body: requestBody,
     );
+    print('后端返回的原始内容: ${response.body}'); // 打印后端返回内容
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -194,45 +208,42 @@ class ApiService {
     }
   }
 
-  /// 获取营养顾问历史消息
+  /// 获取营养顾问历史消息或发送消息并获取最新消息
   Future<List<Map<String, dynamic>>> fetchAdvisorMessages(
-      String username) async {
+      String username, String message) async {
     final baseUrl = _getBaseUrl();
     final url = '$baseUrl/analysis/advisor/messages';
-    final requestBody = json.encode({'username': username});
+    final String msg = (message == null || message.trim().isEmpty)
+        ? '第一次回答时先给用户发送“您好，我是您的健康顾问”。之后不需要再发这句话'
+        : message;
+    final requestBody = json.encode({
+      'username': username,
+      'message': msg,
+    });
+    print('发送到后端的营养顾问信息: $requestBody');
     final response = await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
       body: requestBody,
     );
+    print('后端返回的营养顾问信息: ${response.body}');
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      // 假设后端返回 {"messages": [ ... ]}
+      // 兼容 {"messages": [...]}, [{"role":...}], {"reply": "..." }
       if (data is Map && data.containsKey('messages')) {
         return List<Map<String, dynamic>>.from(data['messages']);
       }
-      // 兼容直接返回数组
       if (data is List) {
         return List<Map<String, dynamic>>.from(data);
+      }
+      if (data is Map && data.containsKey('reply')) {
+        return [
+          {"role": "assistant", "content": data['reply'] ?? ""}
+        ];
       }
       return [];
     } else {
       throw Exception('获取营养顾问信息失败: ${response.body}');
-    }
-  }
-
-  /// 发送营养顾问消息
-  Future<void> sendAdvisorMessage(String username, String message) async {
-    final baseUrl = _getBaseUrl();
-    final url = '$baseUrl/analysis/advisor/send';
-    final requestBody = json.encode({'username': username, 'message': message});
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {'Content-Type': 'application/json'},
-      body: requestBody,
-    );
-    if (response.statusCode != 200) {
-      throw Exception('发送消息失败: ${response.body}');
     }
   }
 }
