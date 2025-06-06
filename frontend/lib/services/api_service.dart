@@ -176,4 +176,63 @@ class ApiService {
       return {"success": false, "message": "补全失败: ${response.body}"};
     }
   }
+
+  /// 获取分析页面的营养数据（蛋白质、钙质、饮水量等）
+  Future<Map<String, dynamic>> fetchAnalysisData(String username) async {
+    final baseUrl = _getBaseUrl();
+    final url = '$baseUrl/analysis/insight';
+    final requestBody = json.encode({'username': username});
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: requestBody,
+    );
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('获取分析数据失败: ${response.body}');
+    }
+  }
+
+  /// 获取营养顾问历史消息
+  Future<List<Map<String, dynamic>>> fetchAdvisorMessages(
+      String username) async {
+    final baseUrl = _getBaseUrl();
+    final url = '$baseUrl/analysis/advisor/messages';
+    final requestBody = json.encode({'username': username});
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: requestBody,
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      // 假设后端返回 {"messages": [ ... ]}
+      if (data is Map && data.containsKey('messages')) {
+        return List<Map<String, dynamic>>.from(data['messages']);
+      }
+      // 兼容直接返回数组
+      if (data is List) {
+        return List<Map<String, dynamic>>.from(data);
+      }
+      return [];
+    } else {
+      throw Exception('获取营养顾问信息失败: ${response.body}');
+    }
+  }
+
+  /// 发送营养顾问消息
+  Future<void> sendAdvisorMessage(String username, String message) async {
+    final baseUrl = _getBaseUrl();
+    final url = '$baseUrl/analysis/advisor/send';
+    final requestBody = json.encode({'username': username, 'message': message});
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: requestBody,
+    );
+    if (response.statusCode != 200) {
+      throw Exception('发送消息失败: ${response.body}');
+    }
+  }
 }

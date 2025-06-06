@@ -4,6 +4,7 @@ import 'profile_screen.dart';
 import 'add_food_screen.dart';
 import '../services/api_service.dart';
 import '../diets/diets.dart';
+import 'analysis_screen.dart'; // 新增
 
 class MainHomeScreen extends StatefulWidget {
   const MainHomeScreen({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     _pages = [
       _buildHomeContent(),
       DietRecordPageV2(),
-      const Center(child: Text('分析页面')),
+      const AnalysisScreen(), // 替换分析页面
       const ProfileScreen(),
     ];
   }
@@ -37,43 +38,48 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _selectedIndex != 3 ? AppBar(
-        title: const Text(
-          '健康饮食管理',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-          ),
-        ),
-        backgroundColor: const Color(0xFF5B6AF5),
-        elevation: 2,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.white),
-            onPressed: () {},
-          ),
-        ],
-      ) : null,
+      appBar: _selectedIndex != 3
+          ? AppBar(
+              title: const Text(
+                '健康饮食管理',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20,
+                ),
+              ),
+              backgroundColor: const Color(0xFF5B6AF5),
+              elevation: 2,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.more_vert, color: Colors.white),
+                  onPressed: () {},
+                ),
+              ],
+            )
+          : null,
       body: _pages[_selectedIndex],
-      floatingActionButton: _selectedIndex == 0 ? FloatingActionButton(
-        onPressed: () async {
-          // 导航到添加食物页面，并监听返回值
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddFoodScreen()),
-          );
-          // 关键：添加后返回true时刷新
-          if (result == true) {
-            setState(() {
-              _initPages(); // 重新生成页面，确保FutureBuilder刷新
-            });
-          }
-        },
-        backgroundColor: const Color(0xFF5B6AF5),
-        elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white),
-      ) : null,
+      floatingActionButton: _selectedIndex == 0
+          ? FloatingActionButton(
+              onPressed: () async {
+                // 导航到添加食物页面，并监听返回值
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AddFoodScreen()),
+                );
+                // 关键：添加后返回true时刷新
+                if (result == true) {
+                  setState(() {
+                    _initPages(); // 重新生成页面，确保FutureBuilder刷新
+                  });
+                }
+              },
+              backgroundColor: const Color(0xFF5B6AF5),
+              elevation: 4,
+              child: const Icon(Icons.add, color: Colors.white),
+            )
+          : null,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -201,7 +207,9 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   bool _isToday(DateTime date) {
     final now = DateTime.now();
-    return date.year == now.year && date.month == now.month && date.day == now.day;
+    return date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day;
   }
 
   // 今日营养摄入卡片
@@ -445,7 +453,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   // 食物列表卡片
   Widget _buildFoodListCard() {
     const username = "testuser";
-    final dateStr = "${_selectedDate.year}-${_selectedDate.month.toString().padLeft(2, '0')}-${_selectedDate.day.toString().padLeft(2, '0')}";
+    final dateStr =
+        "${_selectedDate.year}-${_selectedDate.month.toString().padLeft(2, '0')}-${_selectedDate.day.toString().padLeft(2, '0')}";
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -490,7 +499,9 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                 List<FoodItem> foodItems = [];
                 for (var mealKey in meals.keys) {
                   final meal = meals[mealKey];
-                  if (meal != null && meal['foods'] != null && meal['foods'] is List) {
+                  if (meal != null &&
+                      meal['foods'] != null &&
+                      meal['foods'] is List) {
                     for (var food in meal['foods']) {
                       // mealKey 作为类型传递给 FoodItem
                       foodItems.add(FoodItem.fromFastApi(food, mealKey));
@@ -525,7 +536,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   }
 
   // 食物项目
-  Widget _buildFoodItem(String name, String nutrition, String calories, [String? imageBase64, String? mealType]) {
+  Widget _buildFoodItem(String name, String nutrition, String calories,
+      [String? imageBase64, String? mealType]) {
     Widget imageWidget;
     String? pureBase64 = imageBase64;
     if (pureBase64 != null && pureBase64.isNotEmpty) {
@@ -539,7 +551,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             width: 48,
             height: 48,
             fit: BoxFit.cover,
-            errorBuilder: (ctx, err, stack) => const Icon(Icons.broken_image, color: Colors.grey),
+            errorBuilder: (ctx, err, stack) =>
+                const Icon(Icons.broken_image, color: Colors.grey),
           ),
         );
       } catch (e) {
@@ -577,7 +590,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                   if (mealType != null) ...[
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
                         color: const Color(0xFF5B6AF5).withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
@@ -634,13 +648,16 @@ class FoodItem {
   });
 
   // mealTypeKey为早餐/午餐/晚餐/加餐的英文key
-  factory FoodItem.fromFastApi(Map<String, dynamic> json, [String? mealTypeKey]) {
+  factory FoodItem.fromFastApi(Map<String, dynamic> json,
+      [String? mealTypeKey]) {
     final nutritionMap = json['nutrition'] ?? {};
     String nutritionStr =
         '蛋白质: ${nutritionMap['protein'] ?? 0}g | 碳水: ${nutritionMap['carbon'] ?? 0}g | 脂肪: ${nutritionMap['fat'] ?? 0}g';
     String caloriesStr = '${nutritionMap['calories'] ?? 0} kcal';
     String? imageBase64 = json['image_base64'];
-    if (imageBase64 == null && json['image'] != null && json['image']['base64'] != null) {
+    if (imageBase64 == null &&
+        json['image'] != null &&
+        json['image']['base64'] != null) {
       imageBase64 = json['image']['base64'];
     }
     if (imageBase64 != null && imageBase64.isEmpty) {
