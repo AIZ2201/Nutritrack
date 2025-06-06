@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'profile_screen.dart';
 import 'add_food_screen.dart';
 import '../services/api_service.dart';
+import '../diets/diets.dart';
 
 class MainHomeScreen extends StatefulWidget {
   const MainHomeScreen({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   void _initPages() {
     _pages = [
       _buildHomeContent(),
-      const Center(child: Text('饮食页面')),
+      DietRecordPageV2(),
       const Center(child: Text('分析页面')),
       const ProfileScreen(),
     ];
