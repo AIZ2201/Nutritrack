@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'profile_screen.dart';
 import 'add_food_screen.dart';
 import '../services/api_service.dart';
-import '../diets/diets.dart';
 import 'analysis_screen.dart'; // 新增
+import '../services/user_manager.dart'; // 新增导入
+import 'diet_record_screen.dart'; // 新增导入
 
 class MainHomeScreen extends StatefulWidget {
   const MainHomeScreen({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   void _initPages() {
     _pages = [
       _buildHomeContent(),
-      DietRecordPageV2(),
+      const DietRecordScreen(), // 替换为新页面
       const AnalysisScreen(), // 替换分析页面
       const ProfileScreen(),
     ];
@@ -452,7 +453,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   // 食物列表卡片
   Widget _buildFoodListCard() {
-    const username = "testuser";
+    final username = UserManager.instance.username;
     final dateStr =
         "${_selectedDate.year}-${_selectedDate.month.toString().padLeft(2, '0')}-${_selectedDate.day.toString().padLeft(2, '0')}";
     return Card(
@@ -480,7 +481,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
             ),
             const SizedBox(height: 16),
             FutureBuilder<Map<String, dynamic>>(
-              future: ApiService().fetchMealsByDate(username, dateStr),
+              future: ApiService().fetchMealsByDate(dateStr),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());

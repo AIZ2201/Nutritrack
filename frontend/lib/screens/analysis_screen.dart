@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../services/user_manager.dart'; // 新增导入
 
 class AnalysisScreen extends StatefulWidget {
   const AnalysisScreen({Key? key}) : super(key: key);
@@ -9,7 +10,6 @@ class AnalysisScreen extends StatefulWidget {
 }
 
 class _AnalysisScreenState extends State<AnalysisScreen> {
-  final String username = "testuser";
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
@@ -28,7 +28,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
     });
     try {
       // 首次进入页面时，message为空
-      final msgs = await ApiService().fetchAdvisorMessages(username, '');
+      final msgs = await ApiService().fetchAdvisorMessages('');
       setState(() {
         _messages = msgs;
         _loading = false;
@@ -101,7 +101,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
             ),
             const SizedBox(height: 20),
             FutureBuilder<Map<String, dynamic>>(
-              future: ApiService().fetchAnalysisData(username),
+              future: ApiService().fetchAnalysisData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -324,8 +324,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
     });
     _controller.clear();
     try {
-      // 只获取AI回复，不整体刷新历史
-      final msgs = await ApiService().fetchAdvisorMessages(username, text);
+      final msgs = await ApiService().fetchAdvisorMessages(text);
       // 只取AI回复（假设后端返回的最后一条或唯一一条是AI回复）
       Map<String, dynamic>? aiReply;
       if (msgs.isNotEmpty) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'register_info_name_screen.dart'; // 新增导入
 import '../services/api_service.dart'; // 新增导入
+import '../services/user_manager.dart'; // 新增导入
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -31,6 +32,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     if (result['success'] == true) {
+      // 注册成功，保存全局username
+      UserManager.instance.username = username;
       // 跳转到信息采集第一页
       Navigator.push(
         context,

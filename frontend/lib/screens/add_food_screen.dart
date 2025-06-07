@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../services/api_service.dart';
+import '../services/user_manager.dart'; // 新增导入
 
 class AddFoodScreen extends StatefulWidget {
   const AddFoodScreen({Key? key}) : super(key: key);
@@ -96,7 +97,9 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  color: _isPhotoMode ? const Color(0xFF5B6AF5) : Colors.transparent,
+                  color: _isPhotoMode
+                      ? const Color(0xFF5B6AF5)
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
@@ -121,7 +124,9 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  color: !_isPhotoMode ? const Color(0xFF5B6AF5) : Colors.transparent,
+                  color: !_isPhotoMode
+                      ? const Color(0xFF5B6AF5)
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
@@ -204,7 +209,8 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
           children: [
             _buildPhotoButton(Icons.camera_alt, '拍照', () async {
               final picker = ImagePicker();
-              final pickedFile = await picker.pickImage(source: ImageSource.camera, imageQuality: 80);
+              final pickedFile = await picker.pickImage(
+                  source: ImageSource.camera, imageQuality: 80);
               if (pickedFile != null) {
                 final bytes = await pickedFile.readAsBytes();
                 setState(() {
@@ -218,7 +224,8 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
             const SizedBox(width: 24),
             _buildPhotoButton(Icons.photo_library, '相册', () async {
               final picker = ImagePicker();
-              final pickedFile = await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+              final pickedFile = await picker.pickImage(
+                  source: ImageSource.gallery, imageQuality: 80);
               if (pickedFile != null) {
                 final bytes = await pickedFile.readAsBytes();
                 setState(() {
@@ -236,7 +243,8 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   }
 
   // 照片按钮
-  Widget _buildPhotoButton(IconData icon, String label, VoidCallback onPressed) {
+  Widget _buildPhotoButton(
+      IconData icon, String label, VoidCallback onPressed) {
     return GestureDetector(
       onTap: onPressed,
       child: Column(
@@ -424,7 +432,9 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF5B6AF5) : Colors.transparent,
+                        color: isSelected
+                            ? const Color(0xFF5B6AF5)
+                            : Colors.transparent,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(
@@ -585,7 +595,6 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
       child: ElevatedButton(
         onPressed: () async {
           // 这里添加保存食物的逻辑
-          final username = "testuser"; // 实际应从全局或登录获取
           final foodName = _foodNameController.text;
           final calories = double.tryParse(_caloriesController.text) ?? 0;
           final protein = double.tryParse(_proteinController.text) ?? 0;
@@ -609,7 +618,6 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
           // 只传给后端时去掉餐字
           String mealTypeForBackend = mealType.replaceAll('餐', '');
           final success = await ApiService().uploadFoodRecord(
-            username: username,
             foodName: foodName,
             protein: protein,
             fat: fat,

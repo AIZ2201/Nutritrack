@@ -278,13 +278,13 @@
       "languageVersion": "3.4"
     },
     {
-      "name": "nutritrack",
+      "name": "frontend",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2025-06-06T02:02:30.645381Z",
+  "generated": "2025-06-07T04:46:39.794402Z",
   "generator": "pub",
   "generatorVersion": "3.7.2",
   "flutterRoot": "file:///D:/Self_Program/Flutter/flutter",

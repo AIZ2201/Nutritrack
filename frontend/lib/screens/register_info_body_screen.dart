@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../services/user_manager.dart'; // 新增导入
 import 'main_home_screen.dart'; // 新增导入
 
 class RegisterInfoBodyScreen extends StatefulWidget {
@@ -53,6 +54,8 @@ class _RegisterInfoBodyScreenState extends State<RegisterInfoBodyScreen> {
     };
     final result = await _apiService.completeRegisterInfo(data);
     if (result['success'] == true) {
+      // 注册信息补全成功，保存全局username
+      UserManager.instance.username = widget.username;
       // 注册信息补全成功，跳转到主页面
       Navigator.pushAndRemoveUntil(
         context,

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert'; // 添加此行以支持 JSON 解码
 import 'package:http/http.dart' as http;
+import 'user_manager.dart'; // 新增
 
 enum BackendMode { local, remote, server } // 定义后端模式枚举
 
@@ -17,7 +18,7 @@ class ApiService {
       case BackendMode.local:
         return 'http://192.168.1.100:8000'; // 本地模式地址
       case BackendMode.remote:
-        return 'http://10.208.76.42:8000'; // 异地模式地址
+        return 'http://10.203.138.134:8000'; // 异地模式地址
       case BackendMode.server:
         return 'http://123.60.149.85:8000'; // 服务器模式地址
     }
@@ -64,10 +65,10 @@ class ApiService {
   }
 
   /// 获取指定日期的食物卡片内容
-  Future<Map<String, dynamic>> fetchMealsByDate(
-      String username, String date) async {
+  Future<Map<String, dynamic>> fetchMealsByDate(String date) async {
     final baseUrl = _getBaseUrl();
     final url = '$baseUrl/homePage/todayMeals';
+    final username = UserManager.instance.username;
     final requestBody = json.encode({'username': username, 'date': date});
     final response = await http.post(
       Uri.parse(url),
@@ -83,7 +84,6 @@ class ApiService {
 
   /// 上传饮食记录（含图片 base64）
   Future<bool> uploadFoodRecord({
-    required String username,
     required String foodName,
     required double protein,
     required double fat,
@@ -93,7 +93,8 @@ class ApiService {
     required String imageBase64,
   }) async {
     final baseUrl = _getBaseUrl();
-    final url = '$baseUrl/records/upload'; // 修改为正确的上传路径
+    final url = '$baseUrl/records/upload';
+    final username = UserManager.instance.username;
     final body = json.encode({
       'username': username,
       'foodName': foodName,
@@ -190,9 +191,10 @@ class ApiService {
   }
 
   /// 获取分析页面的营养数据（蛋白质、钙质、饮水量等）
-  Future<Map<String, dynamic>> fetchAnalysisData(String username) async {
+  Future<Map<String, dynamic>> fetchAnalysisData() async {
     final baseUrl = _getBaseUrl();
     final url = '$baseUrl/analysis/insight';
+    final username = UserManager.instance.username;
     final requestBody = json.encode({'username': username});
     print('发送到后端的信息: $requestBody'); // 打印发送内容
     final response = await http.post(
@@ -210,10 +212,11 @@ class ApiService {
 
   /// 获取营养顾问历史消息或发送消息并获取最新消息
   Future<List<Map<String, dynamic>>> fetchAdvisorMessages(
-      String username, String message) async {
+      String message) async {
     final baseUrl = _getBaseUrl();
     final url = '$baseUrl/analysis/advisor/messages';
-    final String msg = (message == null || message.trim().isEmpty)
+    final username = UserManager.instance.username;
+    final String msg = (message.trim().isEmpty)
         ? '第一次回答时先给用户发送“您好，我是您的健康顾问”。之后不需要再发这句话'
         : message;
     final requestBody = json.encode({
@@ -244,6 +247,27 @@ class ApiService {
       return [];
     } else {
       throw Exception('获取营养顾问信息失败: ${response.body}');
+    }
+  }
+
+  /// 获取饮食记录页面所有数据（新版diet_record_screen专用）
+  Future<Map<String, dynamic>> fetchDietRecord({
+    required String username,
+    required String date,
+  }) async {
+    final baseUrl = _getBaseUrl();
+    // 按照后端接口要求，使用 /record/daily 作为路径
+    final url = '$baseUrl/record/daily';
+    final requestBody = json.encode({'username': username, 'date': date});
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: requestBody,
+    );
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('获取饮食记录失败: ${response.body}');
     }
   }
 }
