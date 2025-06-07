@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import 'register_screen.dart';
 import 'main_home_screen.dart'; // 新增导入
+import '../services/user_manager.dart'; // 修改为正确路径
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,13 +17,15 @@ class _HomeScreenState extends State<HomeScreen> {
   final ApiService _apiService = ApiService();
 
   void _login() async {
-    final username = _usernameController.text;
-    final password = _passwordController.text;
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text.trim();
 
     try {
-      // final result = await _apiService.login(username, password);
-      if (true) {//test
-        // 登录成功后跳转到 main_home_screen
+      final result = await _apiService.login(username, password);
+      if (result['success'] == true) {
+        // 登录成功后保存全局username
+        UserManager.instance.username = username;
+        // 跳转到 main_home_screen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

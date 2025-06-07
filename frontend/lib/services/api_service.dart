@@ -18,7 +18,7 @@ class ApiService {
       case BackendMode.local:
         return 'http://192.168.1.100:8000'; // 本地模式地址
       case BackendMode.remote:
-        return 'http://10.203.138.134:8000'; // 异地模式地址
+        return 'http://10.203.155.206:8000'; // 异地模式地址
       case BackendMode.server:
         return 'http://123.60.149.85:8000'; // 服务器模式地址
     }
@@ -256,16 +256,38 @@ class ApiService {
     required String date,
   }) async {
     final baseUrl = _getBaseUrl();
-    // 按照后端接口要求，使用 /record/daily 作为路径
     final url = '$baseUrl/record/daily';
     final requestBody = json.encode({'username': username, 'date': date});
+    print('发送到后端的饮食记录请求: $requestBody');
     final response = await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
       body: requestBody,
     );
+    print('后端返回的饮食记录数据: ${response.body}');
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      final data = json.decode(response.body);
+      // 递归处理所有meals下foods，确保image_base64字段被保留
+      if (data is Map && data.containsKey('meals')) {
+        final meals = data['meals'];
+        if (meals is Map) {
+          meals.forEach((mealKey, mealValue) {
+            if (mealValue is Map && mealValue.containsKey('foods')) {
+              final foods = mealValue['foods'];
+              if (foods is List) {
+                for (var food in foods) {
+                  // food为Map，image_base64字段直接保留，无需特殊处理
+                  // 可在此处做调试输出
+                  if (food is Map && food.containsKey('imageBase64')) {
+                    // print('解析到图片: ${food['imageBase64']?.substring(0, 30)}...');
+                  }
+                }
+              }
+            }
+          });
+        }
+      }
+      return data;
     } else {
       throw Exception('获取饮食记录失败: ${response.body}');
     }
