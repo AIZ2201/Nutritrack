@@ -22,9 +22,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final result = await _apiService.login(username, password);
-      if (result['success'] == true) {
+      if (result['success'] == true)
+       {
         // 登录成功后保存全局username
-        UserManager.instance.username = username;
+        UserManager.instance.username = username;//记得改回来
         // 跳转到 main_home_screen
         Navigator.pushReplacement(
           context,
