@@ -3,7 +3,7 @@ class UserManager {
   factory UserManager() => _instance;
   UserManager._internal();
 
-  String? username;
+  String? username='testuser';///默认用户名，具体再调入
 
   static UserManager get instance => _instance;
 }

@@ -18,7 +18,7 @@ class ApiService {
       case BackendMode.local:
         return 'http://192.168.1.100:8000'; // 本地模式地址
       case BackendMode.remote:
-        return 'http://10.203.138.134:8000'; // 异地模式地址
+        return 'http://10.203.174.1:8000'; // 异地模式地址
       case BackendMode.server:
         return 'http://123.60.149.85:8000'; // 服务器模式地址
     }
@@ -70,6 +70,7 @@ class ApiService {
     final url = '$baseUrl/homePage/todayMeals';
     final username = UserManager.instance.username;
     final requestBody = json.encode({'username': username, 'date': date});
+    print('发送到后端的信息: $requestBody'); // 打印发送内容
     final response = await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
@@ -98,10 +99,10 @@ class ApiService {
     final body = json.encode({
       'username': username,
       'foodName': foodName,
-      'protain': protein, // 注意拼写
+      'protein': protein, // 注意拼写
       'fat': fat,
       'carbon': carbon,
-      'calorie': calorie,
+      'calories': calorie,
       'time': time,
       'image_base64': imageBase64,
     });
@@ -194,7 +195,7 @@ class ApiService {
   Future<Map<String, dynamic>> fetchAnalysisData() async {
     final baseUrl = _getBaseUrl();
     final url = '$baseUrl/analysis/insight';
-    final username = UserManager.instance.username;
+    final username = UserManager.instance.username;/// 先暂时用一个具体的值;
     final requestBody = json.encode({'username': username});
     print('发送到后端的信息: $requestBody'); // 打印发送内容
     final response = await http.post(
@@ -256,8 +257,8 @@ class ApiService {
     required String date,
   }) async {
     final baseUrl = _getBaseUrl();
-    // 按照后端接口要求，使用 /record/daily 作为路径
-    final url = '$baseUrl/record/daily';
+    // 按照后端接口要求，使用 /record/currentMeals 作为路径
+    final url = '$baseUrl/record/currentMeals';
     final requestBody = json.encode({'username': username, 'date': date});
     final response = await http.post(
       Uri.parse(url),

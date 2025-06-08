@@ -21,8 +21,8 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
 
   Future<Map<String, dynamic>> _fetchDataForDate(DateTime date) {
     final username = UserManager.instance.username;
-    final dateStr =
-        "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+   final dateStr =
+    "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
     // 修改为调用新的API
     return ApiService().fetchDietRecord(username: username ?? '', date: dateStr);
   }
