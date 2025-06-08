@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../services/user_manager.dart';
+import 'dart:convert';
 
 class DietRecordScreen extends StatefulWidget {
-  const DietRecordScreen({Key? key}) : super(key: key);
+  final ApiService? apiService; // 新增
+  const DietRecordScreen({Key? key, this.apiService}) : super(key: key);
 
   @override
   State<DietRecordScreen> createState() => _DietRecordScreenState();
@@ -21,10 +23,18 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
 
   Future<Map<String, dynamic>> _fetchDataForDate(DateTime date) {
     final username = UserManager.instance.username;
+<<<<<<< HEAD
    final dateStr =
     "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
     // 修改为调用新的API
     return ApiService().fetchDietRecord(username: username ?? '', date: dateStr);
+=======
+    final dateStr =
+        "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+    // 使用依赖注入的apiService
+    final api = widget.apiService ?? ApiService();
+    return api.fetchDietRecord(username: username ?? '', date: dateStr);
+>>>>>>> f3f95a195c989f83f8a1b27e56560ef363e3d8ec
   }
 
   void _goToPreviousDay() {
@@ -291,16 +301,6 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
                     '脂肪', nutrition['fat']?.toString() ?? '0', 'g'),
               ],
             ),
-            const SizedBox(height: 16),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: LinearProgressIndicator(
-                value: progress is num ? progress.toDouble() : 0.0,
-                backgroundColor: const Color(0xFFE5E7EB),
-                color: const Color(0xFF5B6AF5),
-                minHeight: 8,
-              ),
-            ),
           ],
         ),
       ),
@@ -375,8 +375,16 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
       );
     }
 
+    // 对meals按time字段排序
+    final sortedMealEntries = meals.entries.toList()
+      ..sort((a, b) {
+        final timeA = a.value['time'] ?? '';
+        final timeB = b.value['time'] ?? '';
+        return timeA.compareTo(timeB);
+      });
+
     return Column(
-      children: meals.entries.map((entry) {
+      children: sortedMealEntries.map((entry) {
         final mealType = entry.key;
         final mealData = entry.value;
         return Container(
@@ -444,38 +452,6 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
             ),
             const SizedBox(height: 16),
             ...foods.map((food) => _buildFoodItem(food)).toList(),
-            const SizedBox(height: 12),
-            Center(
-              child: Container(
-                width: double.infinity,
-                child: TextButton.icon(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                    backgroundColor: const Color(0xFFF3F4F6),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: BorderSide(
-                        color: const Color(0xFF5B6AF5).withOpacity(0.3),
-                        width: 1.5,
-                      ),
-                    ),
-                  ),
-                  icon: Icon(
-                    Icons.add,
-                    color: const Color(0xFF5B6AF5),
-                    size: 18,
-                  ),
-                  label: Text(
-                    '添加食物',
-                    style: TextStyle(
-                      color: const Color(0xFF5B6AF5),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -483,6 +459,35 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
   }
 
   Widget _buildFoodItem(Map<String, dynamic> food) {
+    // 兼容 imageBase64 和 image_base64 字段
+    Widget imageWidget;
+    String? imageBase64 = food['imageBase64'] ?? food['image_base64'];
+    if (imageBase64 != null && imageBase64.isNotEmpty) {
+      final regex = RegExp(r'data:image/[^;]+;base64,');
+      String pureBase64 = imageBase64.replaceAll(regex, '');
+      try {
+        imageWidget = ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.memory(
+            base64Decode(pureBase64),
+            width: 48,
+            height: 48,
+            fit: BoxFit.cover,
+            errorBuilder: (ctx, err, stack) =>
+                const Icon(Icons.broken_image, color: Colors.grey),
+          ),
+        );
+      } catch (e) {
+        imageWidget = const Icon(Icons.broken_image, color: Colors.grey);
+      }
+    } else {
+      imageWidget = const Icon(
+        Icons.fastfood,
+        color: Color(0xFF5B6AF5),
+        size: 24,
+      );
+    }
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       child: Row(
@@ -498,11 +503,7 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
                 width: 1,
               ),
             ),
-            child: Icon(
-              Icons.fastfood,
-              color: const Color(0xFF5B6AF5),
-              size: 24,
-            ),
+            child: imageWidget,
           ),
           const SizedBox(width: 12),
           Expanded(
