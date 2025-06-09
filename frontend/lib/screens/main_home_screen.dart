@@ -7,6 +7,39 @@ import 'analysis_screen.dart'; // 新增
 import '../services/user_manager.dart'; // 新增导入
 import 'diet_record_screen.dart'; // 新增导入
 
+// 固定建议内容结构
+class _AdviceInfo {
+  final IconData icon;
+  final String title;
+  final String desc;
+  _AdviceInfo(this.icon, this.title, this.desc);
+}
+
+// 判断营养素是否充足，返回建议内容
+_AdviceInfo _getAdvice({
+  required IconData icon,
+  required String label,
+  required dynamic value,
+  required dynamic target,
+  required String increaseText,
+  required String decreaseText,
+  required String increaseDesc,
+  required String decreaseDesc,
+}) {
+  double v = (value is num)
+      ? value.toDouble()
+      : double.tryParse(value?.toString() ?? '') ?? 0;
+  double t = (target is num)
+      ? target.toDouble()
+      : double.tryParse(target?.toString() ?? '') ?? 0;
+  if (t == 0) return _AdviceInfo(icon, '$label目标未设置', '暂无建议');
+  if (v < t) {
+    return _AdviceInfo(icon, increaseText, increaseDesc);
+  } else {
+    return _AdviceInfo(icon, decreaseText, decreaseDesc);
+  }
+}
+
 class MainHomeScreen extends StatefulWidget {
   const MainHomeScreen({Key? key}) : super(key: key);
 
@@ -16,7 +49,6 @@ class MainHomeScreen extends StatefulWidget {
 
 class _MainHomeScreenState extends State<MainHomeScreen> {
   int _selectedIndex = 0;
-  DateTime _selectedDate = DateTime.now(); // 新增：当前选中的日期
 
   // 页面列表
   late List<Widget> _pages; // 移除final，便于刷新
@@ -137,12 +169,11 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
 
   // 主页内容 (保持原有代码)
   Widget _buildHomeContent() {
-    // 保持原有的主页内容代码...
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          _buildDateSelector(), // 新增：日期选择器
+          _buildDateDisplay(), // 只显示日期
           const SizedBox(height: 8),
           _buildNutritionSummaryCard(),
           const SizedBox(height: 16),
@@ -157,108 +188,122 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     );
   }
 
-  // 新增：日期选择器
-  Widget _buildDateSelector() {
+  // 只显示当前日期的UI
+  Widget _buildDateDisplay() {
+    final now = DateTime.now();
+    final dateStr =
+        "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        IconButton(
-          icon: const Icon(Icons.chevron_left),
-          onPressed: () {
-            setState(() {
-              _selectedDate = _selectedDate.subtract(const Duration(days: 1));
-            });
-          },
-        ),
-        GestureDetector(
-          onTap: () async {
-            final picked = await showDatePicker(
-              context: context,
-              initialDate: _selectedDate,
-              firstDate: DateTime(2020),
-              lastDate: DateTime.now(),
-            );
-            if (picked != null) {
-              setState(() {
-                _selectedDate = picked;
-              });
-            }
-          },
-          child: Text(
-            "${_selectedDate.year}-${_selectedDate.month.toString().padLeft(2, '0')}-${_selectedDate.day.toString().padLeft(2, '0')}",
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+        Icon(Icons.calendar_today, size: 18, color: Colors.grey[600]),
+        const SizedBox(width: 8),
+        Text(
+          dateStr,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
           ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.chevron_right),
-          onPressed: () {
-            if (!_isToday(_selectedDate)) {
-              setState(() {
-                _selectedDate = _selectedDate.add(const Duration(days: 1));
-              });
-            }
-          },
         ),
       ],
     );
   }
 
-  bool _isToday(DateTime date) {
-    final now = DateTime.now();
-    return date.year == now.year &&
-        date.month == now.month &&
-        date.day == now.day;
-  }
-
   // 今日营养摄入卡片
   Widget _buildNutritionSummaryCard() {
+    final username = UserManager.instance.username;
+    final now = DateTime.now();
+    final dateStr =
+        "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+        child: FutureBuilder<Map<String, dynamic>>(
+          future: ApiService().fetchMealsByDate(dateStr),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError || !snapshot.hasData) {
+              return const Center(child: Text('加载失败'));
+            }
+            // 解析后端 todayMeals 字段
+            final todayMeals = snapshot.data!['todayMeals'];
+            Map<String, dynamic> meals = {};
+            if (todayMeals != null && todayMeals['meals'] != null) {
+              meals = todayMeals['meals'];
+            }
+            num totalCalories = 0,
+                totalProtein = 0,
+                totalFat = 0,
+                totalCarbon = 0;
+            if (meals.isNotEmpty) {
+              for (var meal in meals.values) {
+                if (meal != null &&
+                    meal['foods'] != null &&
+                    meal['foods'] is List) {
+                  for (var food in meal['foods']) {
+                    final nutrition = food['nutrition'] ?? {};
+                    totalCalories += (nutrition['calories'] ?? 0) is num
+                        ? nutrition['calories'] ?? 0
+                        : num.tryParse(
+                                nutrition['calories']?.toString() ?? '0') ??
+                            0;
+                    totalProtein += (nutrition['protein'] ?? 0) is num
+                        ? nutrition['protein'] ?? 0
+                        : num.tryParse(
+                                nutrition['protein']?.toString() ?? '0') ??
+                            0;
+                    totalFat += (nutrition['fat'] ?? 0) is num
+                        ? nutrition['fat'] ?? 0
+                        : num.tryParse(nutrition['fat']?.toString() ?? '0') ??
+                            0;
+                    totalCarbon += (nutrition['carbon'] ?? 0) is num
+                        ? nutrition['carbon'] ?? 0
+                        : num.tryParse(
+                                nutrition['carbon']?.toString() ?? '0') ??
+                            0;
+                  }
+                }
+              }
+            }
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.restaurant,
-                  color: const Color(0xFF5B6AF5),
-                  size: 20,
+                Row(
+                  children: [
+                    Icon(
+                      Icons.restaurant,
+                      color: const Color(0xFF5B6AF5),
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      '今日营养摄入',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 8),
-                const Text(
-                  '今日营养摄入',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildNutritionItem(
+                        '${totalCalories.toStringAsFixed(0)}', '卡路里'),
+                    _buildNutritionItem(
+                        '${totalProtein.toStringAsFixed(0)}g', '蛋白质'),
+                    _buildNutritionItem(
+                        '${totalFat.toStringAsFixed(0)}g', '脂肪'),
+                    _buildNutritionItem(
+                        '${totalCarbon.toStringAsFixed(0)}g', '碳水'),
+                  ],
                 ),
               ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildNutritionItem('1,450', '卡路里'),
-                _buildNutritionItem('65g', '蛋白质'),
-                _buildNutritionItem('45g', '脂肪'),
-                _buildNutritionItem('180g', '碳水'),
-              ],
-            ),
-            const SizedBox(height: 16),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: LinearProgressIndicator(
-                value: 0.65,
-                backgroundColor: const Color(0xFFE5E7EB),
-                color: const Color(0xFF5B6AF5),
-                minHeight: 8,
-              ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
@@ -370,92 +415,156 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+        child: FutureBuilder<Map<String, dynamic>>(
+          future: ApiService().fetchAnalysisData(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError || !snapshot.hasData) {
+              return const Center(child: Text('加载失败'));
+            }
+            final data = snapshot.data!;
+            // 兼容后端返回的 analysis 格式
+            final analysis = data['analysis'] ?? {};
+            final List<_AdviceInfo> advices = [];
+
+            advices.add(_getAdviceFromAnalysis(
+              icon: Icons.local_fire_department,
+              label: '卡路里',
+              analysis: analysis['calories'],
+              increaseText: '建议增加卡路里摄入',
+              decreaseText: '建议减少卡路里摄入',
+              increaseDesc: '您的卡路里摄入低于目标，建议适当增加主食、坚果等高能量食物。',
+              decreaseDesc: '您的卡路里摄入已超标，建议减少高热量食物的摄入。',
+            ));
+            advices.add(_getAdviceFromAnalysis(
+              icon: Icons.fitness_center,
+              label: '蛋白质',
+              analysis: analysis['protein'],
+              increaseText: '建议增加蛋白质摄入',
+              decreaseText: '建议减少蛋白质摄入',
+              increaseDesc: '您的蛋白质摄入低于目标，建议增加鸡胸肉、鱼类或豆制品的摄入。',
+              decreaseDesc: '您的蛋白质摄入已超标，建议减少高蛋白食物的摄入。',
+            ));
+            advices.add(_getAdviceFromAnalysis(
+              icon: Icons.opacity,
+              label: '脂肪',
+              analysis: analysis['fat'],
+              increaseText: '建议增加脂肪摄入',
+              decreaseText: '建议减少脂肪摄入',
+              increaseDesc: '您的脂肪摄入低于目标，建议适当增加坚果、橄榄油等健康脂肪。',
+              decreaseDesc: '您的脂肪摄入已超标，建议减少油炸食品和高脂肪食物。',
+            ));
+            advices.add(_getAdviceFromAnalysis(
+              icon: Icons.grain,
+              label: '碳水',
+              analysis: analysis['carbon'],
+              increaseText: '建议增加碳水摄入',
+              decreaseText: '建议减少碳水摄入',
+              increaseDesc: '您的碳水摄入低于目标，建议适当增加全谷物、薯类等主食。',
+              decreaseDesc: '您的碳水摄入已超标，建议减少精制糖和高碳水食物。',
+            ));
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.lightbulb_outline,
-                  color: const Color(0xFF5B6AF5),
-                  size: 20,
+                Row(
+                  children: [
+                    Icon(
+                      Icons.lightbulb_outline,
+                      color: const Color(0xFF5B6AF5),
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    const Text(
+                      '今日营养建议',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 8),
-                const Text(
-                  '今日营养建议',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                const SizedBox(height: 16),
+                ...advices
+                    .map((a) => _buildAdviceItem(a.icon, a.title, a.desc))
+                    .toList(),
               ],
-            ),
-            const SizedBox(height: 16),
-            _buildAdviceItem(
-              Icons.fitness_center,
-              '增加蛋白质摄入',
-              '您今天的蛋白质摄入低于目标，建议增加鸡胸肉、鱼类或豆制品的摄入。',
-            ),
-            const Divider(height: 24),
-            _buildAdviceItem(
-              Icons.grain,
-              '减少碳水化合物',
-              '您的碳水摄入已接近每日上限，建议晚餐选择低碳水食物。',
-            ),
-            const Divider(height: 24),
-            _buildAdviceItem(
-              Icons.refresh,
-              '补充维生素C',
-              '建议增加柑橘类水果或绿叶蔬菜的摄入，以满足维生素C的需求。',
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
   }
 
-  // 建议项目
-  Widget _buildAdviceItem(IconData icon, String title, String description) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(
-          icon,
-          color: const Color(0xFF5B6AF5),
-          size: 24,
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
+  // 根据 analysis 字段生成建议
+  _AdviceInfo _getAdviceFromAnalysis({
+    required IconData icon,
+    required String label,
+    required dynamic analysis,
+    required String increaseText,
+    required String decreaseText,
+    required String increaseDesc,
+    required String decreaseDesc,
+  }) {
+    if (analysis == null) {
+      return _AdviceInfo(icon, '$label目标未设置', '暂无建议');
+    }
+    final status = analysis['状态']?.toString() ?? '';
+    // 判断状态字符串是否包含“摄入不足”
+    if (status.contains('摄入不足')) {
+      return _AdviceInfo(icon, increaseText, increaseDesc);
+    } else if (status.contains('超标') || status.contains('摄入过多')) {
+      return _AdviceInfo(icon, decreaseText, decreaseDesc);
+    } else {
+      // 其它情况直接显示状态
+      return _AdviceInfo(icon, '$label已达标', status.isNotEmpty ? status : '已达标');
+    }
+  }
+
+  // 营养建议项目
+  Widget _buildAdviceItem(IconData icon, String title, String desc) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: const Color(0xFF5B6AF5), size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                description,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
+                const SizedBox(height: 2),
+                Text(
+                  desc,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[700],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   // 食物列表卡片
   Widget _buildFoodListCard() {
     final username = UserManager.instance.username;
+    final now = DateTime.now();
     final dateStr =
-        "${_selectedDate.year}-${_selectedDate.month.toString().padLeft(2, '0')}-${_selectedDate.day.toString().padLeft(2, '0')}";
+        "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),

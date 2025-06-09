@@ -111,7 +111,6 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                     ),
                   ),
                 ),
-                
               ),
             ),
           ),

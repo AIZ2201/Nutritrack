@@ -18,7 +18,7 @@ class ApiService {
       case BackendMode.local:
         return 'http://192.168.1.100:8000'; // 本地模式地址
       case BackendMode.remote:
-        return 'http://10.208.100.52:8000'; // 异地模式地址
+        return 'http://10.203.211.171:8000'; // 异地模式地址
       case BackendMode.server:
         return 'http://123.60.149.85:8000'; // 服务器模式地址
     }
@@ -64,13 +64,12 @@ class ApiService {
     }
   }
 
-  /// 获取指定日期的食物卡片内容
+  /// 获取指定日期的食物卡片内容（所有餐次）
   Future<Map<String, dynamic>> fetchMealsByDate(String date) async {
     final baseUrl = _getBaseUrl();
     final url = '$baseUrl/homePage/todayMeals';
     final username = UserManager.instance.username;
     final requestBody = json.encode({'username': username, 'date': date});
-    print('发送到后端的信息: $requestBody'); // 打印发送内容
     final response = await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
@@ -113,8 +112,6 @@ class ApiService {
       'time': time,
       'image_base64': image_base64,
     });
-
- 
 
     final response = await http.post(
       Uri.parse(url),
@@ -210,7 +207,9 @@ class ApiService {
   Future<Map<String, dynamic>> fetchAnalysisData() async {
     final baseUrl = _getBaseUrl();
     final url = '$baseUrl/analysis/insight';
-    final username = UserManager.instance.username;/// 先暂时用一个具体的值;
+    final username = UserManager.instance.username;
+
+    /// 先暂时用一个具体的值;
     final requestBody = json.encode({'username': username});
     print('发送到后端的信息: $requestBody'); // 打印发送内容
     final response = await http.post(
@@ -284,6 +283,146 @@ class ApiService {
       return json.decode(response.body);
     } else {
       throw Exception('获取饮食记录失败: ${response.body}');
+    }
+  }
+
+  /// 获取用户个人信息
+  Future<Map<String, dynamic>?> fetchUserProfile(String username) async {
+    final baseUrl = _getBaseUrl();
+    final url = '$baseUrl/mine/profile';
+    final requestBody = json.encode({'username': username});
+    print('前端请求用户信息: $url');
+    print('前端请求体: $requestBody');
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: requestBody,
+    );
+    print('后端返回内容: ${response.body}');
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      return null;
+    }
+  }
+
+  /// 修改昵称
+  Future<Map<String, dynamic>> updateUserName({
+    required String username,
+    required String name,
+  }) async {
+    final baseUrl = _getBaseUrl();
+    final url = '$baseUrl/mine/update-name';
+    final requestBody = json.encode({'username': username, 'name': name});
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: requestBody,
+    );
+    if (response.statusCode == 200) {
+      return {'success': true, ...json.decode(response.body)};
+    } else {
+      return {'success': false, 'message': response.body};
+    }
+  }
+
+  /// 修改目标
+  Future<Map<String, dynamic>> updateUserGoal({
+    required String username,
+    required String goal,
+    String? targetWeight,
+    String? targetMuscle,
+  }) async {
+    final baseUrl = _getBaseUrl();
+    final url = '$baseUrl/mine/update-goal';
+    final Map<String, dynamic> body = {
+      'username': username,
+      'goal': goal,
+    };
+    if (targetWeight != null && targetWeight.isNotEmpty) {
+      body['target_weight'] = double.tryParse(targetWeight);
+    }
+    if (targetMuscle != null && targetMuscle.isNotEmpty) {
+      body['target_muscle'] = double.tryParse(targetMuscle);
+    }
+    final requestBody = json.encode(body);
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: requestBody,
+    );
+    if (response.statusCode == 200) {
+      return {'success': true, ...json.decode(response.body)};
+    } else {
+      return {'success': false, 'message': response.body};
+    }
+  }
+
+  /// 修改健康信息
+  Future<Map<String, dynamic>> updateUserHealth({
+    required String username,
+    String? height,
+    String? weight,
+    String? birthDate,
+    String? region,
+  }) async {
+    final baseUrl = _getBaseUrl();
+    final url = '$baseUrl/mine/update-health';
+    final Map<String, dynamic> body = {
+      'username': username,
+    };
+    if (height != null && height.isNotEmpty) {
+      body['height'] = double.tryParse(height);
+    }
+    if (weight != null && weight.isNotEmpty) {
+      body['weight'] = double.tryParse(weight);
+    }
+    if (birthDate != null && birthDate.isNotEmpty) {
+      body['birth_date'] = birthDate;
+    }
+    if (region != null && region.isNotEmpty) {
+      body['region'] = region;
+    }
+    final requestBody = json.encode(body);
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: requestBody,
+    );
+    if (response.statusCode == 200) {
+      return {'success': true, ...json.decode(response.body)};
+    } else {
+      return {'success': false, 'message': response.body};
+    }
+  }
+
+  /// 修改饮食偏好
+  Future<Map<String, dynamic>> updateUserPreference({
+    required String username,
+    String? disease,
+    String? allergy,
+  }) async {
+    final baseUrl = _getBaseUrl();
+    final url = '$baseUrl/mine/update-pref';
+    final Map<String, dynamic> body = {
+      'username': username,
+    };
+    if (disease != null && disease.isNotEmpty) {
+      body['disease'] = disease;
+    }
+    if (allergy != null && allergy.isNotEmpty) {
+      body['allergy'] = allergy;
+    }
+    final requestBody = json.encode(body);
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: requestBody,
+    );
+    if (response.statusCode == 200) {
+      return {'success': true, ...json.decode(response.body)};
+    } else {
+      return {'success': false, 'message': response.body};
     }
   }
 }
