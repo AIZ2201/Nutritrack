@@ -23,18 +23,10 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
 
   Future<Map<String, dynamic>> _fetchDataForDate(DateTime date) {
     final username = UserManager.instance.username;
-<<<<<<< HEAD
    final dateStr =
     "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
     // 修改为调用新的API
     return ApiService().fetchDietRecord(username: username ?? '', date: dateStr);
-=======
-    final dateStr =
-        "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-    // 使用依赖注入的apiService
-    final api = widget.apiService ?? ApiService();
-    return api.fetchDietRecord(username: username ?? '', date: dateStr);
->>>>>>> f3f95a195c989f83f8a1b27e56560ef363e3d8ec
   }
 
   void _goToPreviousDay() {
@@ -346,8 +338,25 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
   }
 
   Widget _buildMealSection(Map<String, dynamic> data) {
-    final meals = data['meals'] as Map<String, dynamic>? ?? {};
-
+    // 新增：兼容后端 todayMeals 为字符串的情况
+    Map<String, dynamic> meals = {};
+    if (data.containsKey('meals')) {
+      // 兼容老结构
+      meals = data['meals'] as Map<String, dynamic>? ?? {};
+    } else if (data.containsKey('todayMeals')) {
+      dynamic todayMeals = data['todayMeals'];
+      if (todayMeals is String) {
+        try {
+          todayMeals = jsonDecode(todayMeals.replaceAll("'", '"')); // 单引号转双引号
+        } catch (e) {
+          todayMeals = {};
+        }
+      }
+      if (todayMeals is Map && todayMeals.containsKey('meals')) {
+        meals = todayMeals['meals'] as Map<String, dynamic>? ?? {};
+      }
+    }
+    print('meals: $meals');
     if (meals.isEmpty) {
       return Card(
         elevation: 2,
@@ -375,11 +384,11 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
       );
     }
 
-    // 对meals按time字段排序
+    // 对meals按meal_time字段排序
     final sortedMealEntries = meals.entries.toList()
       ..sort((a, b) {
-        final timeA = a.value['time'] ?? '';
-        final timeB = b.value['time'] ?? '';
+        final timeA = a.value['meal_time'] ?? '';
+        final timeB = b.value['meal_time'] ?? '';
         return timeA.compareTo(timeB);
       });
 
@@ -387,14 +396,23 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
       children: sortedMealEntries.map((entry) {
         final mealType = entry.key;
         final mealData = entry.value;
+        // foods 直接是 List<dynamic>
+        final foodsRaw = mealData['foods'] as List<dynamic>? ?? [];
+        // 转换 foods 为 List<Map<String, dynamic>>
+        final foods = foodsRaw.map<Map<String, dynamic>>((f) => Map<String, dynamic>.from(f)).toList();
+        // 计算总卡路里
+        final totalCalories = foods.fold<num>(0, (sum, food) {
+          final nutrition = food['nutrition'] as Map<String, dynamic>? ?? {};
+          return sum + (nutrition['calories'] ?? 0);
+        });
         return Container(
           margin: const EdgeInsets.only(bottom: 16),
           child: _buildMealCard(
             mealType,
-            mealData['time'] ?? '',
-            mealData['totalCalories'] ?? '',
+            mealData['meal_time'] ?? '',
+            totalCalories.toString(),
             mealData['icon'],
-            List<Map<String, dynamic>>.from(mealData['foods'] ?? []),
+            foods,
           ),
         );
       }).toList(),
@@ -459,9 +477,13 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
   }
 
   Widget _buildFoodItem(Map<String, dynamic> food) {
-    // 兼容 imageBase64 和 image_base64 字段
+    // 兼容 imageBase64、image_base64、base64 以及 image['base64'] 字段
     Widget imageWidget;
-    String? imageBase64 = food['imageBase64'] ?? food['image_base64'];
+    String? imageBase64 = food['imageBase64'] ?? food['image_base64'] ?? food['base64'];
+    // 适配 image 字段
+    if (imageBase64 == null && food['image'] != null && food['image'] is Map && food['image']['base64'] != null) {
+      imageBase64 = food['image']['base64'];
+    }
     if (imageBase64 != null && imageBase64.isNotEmpty) {
       final regex = RegExp(r'data:image/[^;]+;base64,');
       String pureBase64 = imageBase64.replaceAll(regex, '');
@@ -487,6 +509,12 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
         size: 24,
       );
     }
+
+    // 适配 foodName 字段和 nutrition
+    final nutrition = food['nutrition'] as Map<String, dynamic>? ?? {};
+    final calories = nutrition['calories']?.toString() ?? '';
+    final protein = nutrition['protein']?.toString() ?? '';
+    final fat = nutrition['fat']?.toString() ?? '';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -514,7 +542,7 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      food['name']?.toString() ?? '',
+                      food['foodName']?.toString() ?? '',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -522,7 +550,7 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
                       ),
                     ),
                     Text(
-                      food['calories']?.toString() ?? '',
+                      calories,
                       style: const TextStyle(
                         color: Color(0xFF5B6AF5),
                         fontSize: 14,
@@ -533,7 +561,7 @@ class _DietRecordScreenState extends State<DietRecordScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  food['details']?.toString() ?? '',
+                  '蛋白质: $protein g, 脂肪: $fat g',
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 12,

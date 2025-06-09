@@ -18,7 +18,7 @@ class ApiService {
       case BackendMode.local:
         return 'http://192.168.1.100:8000'; // 本地模式地址
       case BackendMode.remote:
-        return 'http://10.203.174.1:8000'; // 异地模式地址
+        return 'http://10.208.100.52:8000'; // 异地模式地址
       case BackendMode.server:
         return 'http://123.60.149.85:8000'; // 服务器模式地址
     }
@@ -89,29 +89,44 @@ class ApiService {
     required double protein,
     required double fat,
     required double carbon,
-    required double calorie,
+    required double calories,
     required String time,
-    required String imageBase64,
+    required String image_base64,
   }) async {
     final baseUrl = _getBaseUrl();
     final url = '$baseUrl/records/upload';
-    final username = UserManager.instance.username;
+    final username = UserManager.instance.username ?? "";
+
+    if (username.isEmpty) {
+      print('上传失败：用户名为空');
+      return false;
+    }
+
+    // 正确构建 JSON 请求体
     final body = json.encode({
       'username': username,
       'foodName': foodName,
-      'protein': protein, // 注意拼写
+      'protein': protein,
       'fat': fat,
       'carbon': carbon,
-      'calories': calorie,
+      'calories': calories,
       'time': time,
-      'image_base64': imageBase64,
+      'image_base64': image_base64,
     });
+
+ 
+
     final response = await http.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
       body: body,
     );
+
+    print('后端响应状态码: ${response.statusCode}');
+    print('后端响应内容: ${response.body}');
+
     if (response.statusCode == 200) {
+      print('上传成功');
       return true;
     } else {
       print('上传失败: ${response.body}');
@@ -258,7 +273,7 @@ class ApiService {
   }) async {
     final baseUrl = _getBaseUrl();
     // 按照后端接口要求，使用 /record/currentMeals 作为路径
-    final url = '$baseUrl/record/currentMeals';
+    final url = '$baseUrl/records/currentMeals';
     final requestBody = json.encode({'username': username, 'date': date});
     final response = await http.post(
       Uri.parse(url),

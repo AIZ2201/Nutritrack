@@ -111,6 +111,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                     ),
                   ),
                 ),
+                
               ),
             ),
           ),
@@ -615,16 +616,15 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
             );
             return;
           }
-          // 只传给后端时去掉餐字
-          String mealTypeForBackend = mealType.replaceAll('餐', '');
+          // 直接传“早餐”“午餐”“晚餐”“加餐”给后端
           final success = await ApiService().uploadFoodRecord(
             foodName: foodName,
             protein: protein,
             fat: fat,
             carbon: carbon,
-            calorie: calories,
-            time: mealTypeForBackend, // 只传'早'/'中'/'晚'/'加'
-            imageBase64: imageBase64,
+            calories: calories,
+            time: mealType, // 直接传mealType
+            image_base64: imageBase64,
           );
           if (success) {
             ScaffoldMessenger.of(context).showSnackBar(
