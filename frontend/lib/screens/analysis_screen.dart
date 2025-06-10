@@ -16,9 +16,13 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
   List<Map<String, dynamic>> _messages = [];
   bool _loading = true;
 
+  // 新增：只在页面初始化时加载一次分析数据
+  late Future<Map<String, dynamic>> _insightFuture;
+
   @override
   void initState() {
     super.initState();
+    _insightFuture = ApiService().fetchAnalysisData();
     _initMessages();
   }
 
@@ -27,7 +31,6 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
       _loading = true;
     });
     try {
-      // 首次进入页面时，message为空
       final msgs = await ApiService().fetchAdvisorMessages('');
       setState(() {
         _messages = msgs;
@@ -66,7 +69,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            _buildNutritionInsightCard(),
+            _buildNutritionInsightCard(), // 只在页面初始化时加载
             const SizedBox(height: 16),
             _buildNutritionAdvisorCard(),
             const SizedBox(height: 80),
@@ -76,6 +79,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
     );
   }
 
+  // 只在页面初始化时加载分析数据
   Widget _buildNutritionInsightCard() {
     return Card(
       elevation: 2,
@@ -101,7 +105,7 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
             ),
             const SizedBox(height: 20),
             FutureBuilder<Map<String, dynamic>>(
-              future: ApiService().fetchAnalysisData(),
+              future: _insightFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());

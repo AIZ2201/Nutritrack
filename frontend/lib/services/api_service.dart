@@ -11,7 +11,7 @@ class ApiService {
   final BackendMode backendMode;
 
   // 修改默认模式为 remote
-  ApiService({this.backendMode = BackendMode.remote}); // 后端模式（可切换）
+  ApiService({this.backendMode = BackendMode.server}); // 后端模式（可切换）
 
   String _getBaseUrl() {
     switch (backendMode) {
